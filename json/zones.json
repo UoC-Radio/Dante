@@ -1,0 +1,841 @@
+// example
+{
+  "Monday": {
+    "Zone": [
+      {
+        "Name": "Ψυχεδέλειες",
+        "Start": "00:00",
+        "Maintainer": " Alexis, Hivi ",
+        "Description": " Η ναυαρχίδα του σταθμού, μια playlist για όλη την οικογένεια. "
+      },
+      {
+        "Name": "Krautrock",
+        "Start": "01:00",
+        "Maintainer": " Alexis ",
+        "Description": " Krautrock is a term coined by the british to describe the cult movement that occured in Germany's psychedelic scene during the 70's. "
+      },
+      {
+        "Name": "Zapre",
+        "Start": "02:00",
+        "Maintainer": " Alexis, Melpo ",
+        "Description": " Heroine sketches. "
+      },
+      {
+        "Name": "The Romantics",
+        "Start": "03:00",
+        "Maintainer": " Alexis ",
+        "Description": " During the Romantic period, the sound pallete expanded becoming more expressive and emotional. "
+      },
+      {
+        "Name": "Ambient",
+        "Start": "05:00",
+        "Maintainer": " Alexis ",
+        "Description": " Atmospheric soundscapes.  "
+      },
+      {
+        "Name": "Post Romantic",
+        "Start": "06:00",
+        "Maintainer": " Alexis ",
+        "Description": " Crazy compositions, that extend the expressive nature of romanticism. "
+      },
+      {
+        "Name": "SouthernFolk Rock",
+        "Start": "07:00",
+        "Maintainer": " Alexis, Kadilier, Bam ",
+        "Description": " Southernsounding folkrevolting music. Αλογατάρικα  "
+      },
+      {
+        "Name": "Mozart invades Britain",
+        "Start": "08:00",
+        "Maintainer": " Alexis, Kadilier ",
+        "Description": " British Invasion describes the success certain british bands had, into the US mainstream. Incorporating classical songwriting into the blues soundscape, extended the possibilities of what rock music can be. "
+      },
+      {
+        "Name": "West goes Modal",
+        "Start": "10:00",
+        "Maintainer": " Alexis ",
+        "Description": " Eastern influences into western rock music. "
+      },
+      {
+        "Name": "Modal",
+        "Start": "12:00",
+        "Maintainer": " Alexis ",
+        "Description": " Eastern traditional music. "
+      },
+      {
+        "Name": "Blues Rock",
+        "Start": "14:00",
+        "Maintainer": " Alexis, Elias ",
+        "Description": " Rocking with the Blues. "
+      },
+      {
+        "Name": "Indie",
+        "Start": "15:00",
+        "Maintainer": " Kadilier, Dedekind, Alexis ",
+        "Description": " Indie φλωριές. "
+      },
+      {
+        "Name": "Swing",
+        "Start": "16:00",
+        "Maintainer": " Alexis ",
+        "Description": " It don't mean a thing, if it ain't got that swing. "
+      },
+      {
+        "Name": "Latin Jazz",
+        "Start": "17:00",
+        "Maintainer": " Alexis ",
+        "Description": " Rhythms and melodies from Latin America. "
+      },
+      {
+        "Name": "Chillatronica",
+        "Start": "18:00",
+        "Maintainer": " Alexis, melpo ",
+        "Description": " Downtempo, lo-fi, laid-back tronic music.  "
+      },
+      {
+        "Name": "Hip-Hop with scratches",
+        "Start": "19:00",
+        "Maintainer": " Nikiforos, Alexis ",
+        "Description": " American hip-hop with earthly scratches. "
+      },
+      {
+        "Name": "Punky Reggae Party",
+        "Start": "20:00",
+        "Maintainer": " Alexis ",
+        "Description": " This is a punky reggae party."
+      },
+      {
+        "Name": "World Fusion",
+        "Start": "21:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tradition blended with jazz oriented witchcrafts expended.  "
+      },
+      {
+        "Name": "Psychedelia",
+        "Start": "22:00",
+        "Maintainer": " Alexis, Hivi ",
+        "Description": "  Η ναυαρχίδα του σταθμού, μια playlist για όλη την οικογένεια. "
+      }
+    ]
+  },
+  "Tuesday": {
+    "Zone": [
+      {
+        "Name": "Experimental Dance Music",
+        "Start": "00:00",
+        "Maintainer": " Alexis ",
+        "Description": " Bit-given voltage-driven god-forgiven. "
+      },
+      {
+        "Name": "Νταρκίλες",
+        "Start": "01:00",
+        "Maintainer": " Alexis, Elias, Kadilier, Ggalan, Xanthi ",
+        "Description": " Μουσική του σκότους. "
+      },
+      {
+        "Name": "20th Century Classical Music",
+        "Start": "02:00",
+        "Maintainer": " Alexis ",
+        "Description": " Musicality reconstructed. "
+      },
+      {
+        "Name": "Jazz Foundation",
+        "Start": "03:00",
+        "Maintainer": " Alexis ",
+        "Description": " The sound of Bebop with some early swing tunes. "
+      },
+      {
+        "Name": "Contemporary Jazz",
+        "Start": "04:00",
+        "Maintainer": " Alexis ",
+        "Description": " What jazz has evolved to be.  "
+      },
+      {
+        "Name": "The Romantic era",
+        "Start": "05:00",
+        "Maintainer": " Alexis ",
+        "Description": " Compositions from the romantic era. "
+      },
+      {
+        "Name": "Chillatronica",
+        "Start": "07:00",
+        "Maintainer": " Alexis, melpo ",
+        "Description": " Downtempo, lo-fi, laid-back tronic music. "
+      },
+      {
+        "Name": "Groovin",
+        "Start": "08:00",
+        "Maintainer": " Alexis ",
+        "Description": " No borders, no nations, no discipline, no restriction. Groove is here, groove is everywhere. "
+      },
+      {
+        "Name": "Reggae music",
+        "Start": "10:00",
+        "Maintainer": " Alexis ",
+        "Description": " Jah Rastafari, Reggae music is protest, blessings bless. "
+      },
+      {
+        "Name": "Bluegrass and Folks",
+        "Start": "12:00",
+        "Maintainer": " Alexis, Soricine ",
+        "Description": " Traditional bluegrass with folk and country intrusions. "
+      },
+      {
+        "Name": "Blues Rock",
+        "Start": "13:00",
+        "Maintainer": " Alexis ",
+        "Description": " The Mississippi blues. "
+      },
+      {
+        "Name": "The Power of Rock",
+        "Start": "14:00",
+        "Maintainer": " Alexis ",
+        "Description": " Pure power, pure rock. "
+      },
+      {
+        "Name": "Every Tuesday is Mardi Gras",
+        "Start": "16:00",
+        "Maintainer": " Alexis ",
+        "Description": " Enter the carnival. "
+      },
+      {
+        "Name": "Surf Baroque",
+        "Start": "17:00",
+        "Maintainer": " Alexis ",
+        "Description": " Surf served with sauce baroque. Still wandering why. "
+      },
+      {
+        "Name": "Traditional Progressive Rock",
+        "Start": "18:00",
+        "Maintainer": " Alexis, mickflemm ",
+        "Description": " Το απλό, το όμορφο το παραδοσιακό progressive rock. "
+      },
+      {
+        "Name": "Futurison",
+        "Start": "19:00",
+        "Maintainer": " Alexis ",
+        "Description": " The future is here. "
+      },
+      {
+        "Name": "ίουίου τσούκουτσούκου",
+        "Start": "20:00",
+        "Maintainer": " melpo, Alexis ",
+        "Description": " Self-explanatory. "
+      },
+      {
+        "Name": "Krautrock",
+        "Start": "21:00",
+        "Maintainer": " Alexis ",
+        "Description": " Krautrock is a term coined by the british to describe the cult movement tha occured in Germany's psychedelic scene during the 70's. "
+      },
+      {
+        "Name": "Alternative",
+        "Start": "22:00",
+        "Maintainer": " Alexis, Alice, Kadilier ",
+        "Description": " The emergence of the commercial 80's sound pallete, created a need to diverge from the pop sound. The repercusssions are still in effect. "
+      },
+      {
+        "Name": "Tropicatronica",
+        "Start": "23:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tropical sounds with tronica feels. "
+      }
+    ]
+  },
+  "Wednesday": {
+    "Zone": [
+      {
+        "Name": "Post Rock",
+        "Start": "00:00",
+        "Maintainer": " Alexis, Hivi ",
+        "Description": " Sustain στις κιθάρες, ατμόσφαιρικα riffs και distortion.   "
+      },
+      {
+        "Name": "Experimental Electronica",
+        "Start": "01:00",
+        "Maintainer": " Alexis, melpo ",
+        "Description": " Experiments with electricity. "
+      },
+      {
+        "Name": "Κλασσικισμός",
+        "Start": "02:00",
+        "Maintainer": " Alexis ",
+        "Description": " Haydn, Mozart, Beethoven και άλλα ματζοροειδή. "
+      },
+      {
+        "Name": "Ballads",
+        "Start": "03:00",
+        "Maintainer": " Alexis, Kadilier, Ggalan, melpo ",
+        "Description": " Μπαλαντοειδή κλαψοκαψουροτράγουδα για μοναχικά άτομα. "
+      },
+      {
+        "Name": "But can you swing? ",
+        "Start": "05:00",
+        "Maintainer": " Alexis ",
+        "Description": " Some cats forgot to swing. "
+      },
+      {
+        "Name": "Gospel",
+        "Start": "07:00",
+        "Maintainer": " Alexis ",
+        "Description": " Old-school gospel and its modern day influences. "
+      },
+      {
+        "Name": "Indie",
+        "Start": "08:00",
+        "Maintainer": " Κadilier, Dedekind Alexis ",
+        "Description": " Indie φλωριές. "
+      },
+      {
+        "Name": "Lo-fi Sci-High",
+        "Start": "10:00",
+        "Maintainer": " Alexis ",
+        "Description": " Lo-fi sound repertoire, highly sophisticated electronics. "
+      },
+      {
+        "Name": "Tropicatronica",
+        "Start": "11:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tropical sounds with tronica feels. "
+      },
+      {
+        "Name": "World Fusion",
+        "Start": "12:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tradition blended with jazz oriented witchcrafts expended.  "
+      },
+      {
+        "Name": "The Power of Rock",
+        "Start": "13:00",
+        "Maintainer": " Alexis ",
+        "Description": " Pure power, pure rock. "
+      },
+      {
+        "Name": "Southern Folk Rock",
+        "Start": "14:00",
+        "Maintainer": " Alexis ",
+        "Description": " Southernsounding folkrevolting music. Αλογατάρικα  "
+      },
+      {
+        "Name": "Contemporary Jazz",
+        "Start": "16:00",
+        "Maintainer": " Alexis ",
+        "Description": " Compositions from the current world jazz scene. "
+      },
+      {
+        "Name": "The Progressives",
+        "Start": "17:00",
+        "Maintainer": " Alexis, mickflemm ",
+        "Description": " The abolition of form. "
+      },
+      {
+        "Name": "Jazz Fusion",
+        "Start": "19:00",
+        "Maintainer": " Alexis ",
+        "Description": " Jazz fused with everything, or everything fused with jazz. "
+      },
+      {
+        "Name": "Funk the Soul of America",
+        "Start": "20:00",
+        "Maintainer": " Alexis ",
+        "Description": " Early funk and soul tunes.  "
+      },
+      {
+        "Name": "Hip-Hop with scratches",
+        "Start": "21:00",
+        "Maintainer": " Nikiforos, Alexis ",
+        "Description": " American hip-hop with earthly scratches. "
+      },
+      {
+        "Name": "Groovin",
+        "Start": "22:00",
+        "Maintainer": " Alexis ",
+        "Description": " No borders, no nations, no discipline, no restriction. Groove is here, groove is everywhere.. "
+      }
+    ]
+  },
+  "Thursday": {
+    "Zone": [
+      {
+        "Name": "Zapre",
+        "Start": "00:00",
+        "Maintainer": " Alexis ",
+        "Description": " Heroine sketches.  "
+      },
+      {
+        "Name": "Trip-Hop",
+        "Start": "01:00",
+        "Maintainer": " Alexis ",
+        "Description": " Sounds from the early 90's Bristol scene. "
+      },
+      {
+        "Name": "Experimental Electronica",
+        "Start": "02:00",
+        "Maintainer": " Alexis, melpo ",
+        "Description": " Experiments with electricity. "
+      },
+      {
+        "Name": "Minimalism",
+        "Start": "03:00",
+        "Maintainer": " Alexis ",
+        "Description": " Simple, repetitive, minimal but maximal.  "
+      },
+      {
+        "Name": "Modal",
+        "Start": "04:00",
+        "Maintainer": " Alexis ",
+        "Description": " Eastern modal music. "
+      },
+      {
+        "Name": "Post Romantic",
+        "Start": "05:00",
+        "Maintainer": " Alexis ",
+        "Description": " Crazy compositions, that extend the expressive nature of romanticism. "
+      },
+      {
+        "Name": "New Orleans",
+        "Start": "06:00",
+        "Maintainer": " Alexis ",
+        "Description": " The city that never sleeps. "
+      },
+      {
+        "Name": "Jazz Foundation",
+        "Start": "07:00",
+        "Maintainer": " Alexis ",
+        "Description": " The sound of Bebop fused with swing tunes. "
+      },
+      {
+        "Name": "Funk the Soul of America",
+        "Start": "08:00",
+        "Maintainer": " Alexis ",
+        "Description": " Early funk and soul tunes.  "
+      },
+      {
+        "Name": "Latin Jazz",
+        "Start": "10:00",
+        "Maintainer": " Alexis ",
+        "Description": " Rhythms and melodies from Latin America. "
+      },
+      {
+        "Name": "World Fusion",
+        "Start": "11:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tradition blended with jazz oriented witchcrafts expended.  "
+      },
+      {
+        "Name": "Tropicatronica",
+        "Start": "12:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tropical sounds with tronica feels. "
+      },
+      {
+        "Name": "Balkan",
+        "Start": "13:00",
+        "Maintainer": " Ggalan, Alexis ",
+        "Description": " The Balkan repertoire.  "
+      },
+      {
+        "Name": "Indie",
+        "Start": "14:00",
+        "Maintainer": " kadilier, Dedekind, Alexis ",
+        "Description": " Indie φλωριές. "
+      },
+      {
+        "Name": "Jazz Fusion",
+        "Start": "16:00",
+        "Maintainer": " Alexis ",
+        "Description": " Jazz fused with everything, or everything fused with jazz. "
+      },
+      {
+        "Name": "West goes Modal",
+        "Start": "17:00",
+        "Maintainer": " Alexis ",
+        "Description": " Eastern influences into western rock music. "
+      },
+      {
+        "Name": "Mozart Invades Britain",
+        "Start": "18:00",
+        "Maintainer": " Alexis, kadilier ",
+        "Description": " British Invasion describes the success certain british bands had, into the US mainstream. Incorporating classical songwriting into the blues soundscape, extended the possibilities of what rock music can be. "
+      },
+      {
+        "Name": "Post-punk",
+        "Start": "19:00",
+        "Maintainer": " Kadilier, Dedekind, Alexis ",
+        "Description": "Post-punk describes an expansion in the sonic soundscape of the punk movement.  "
+      },
+      {
+        "Name": "Chillatronica",
+        "Start": "20:00",
+        "Maintainer": " Alexis ",
+        "Description": " Downtempo, lo-fi, laid-back tronic music. "
+      },
+      {
+        "Name": "Psychedelia",
+        "Start": "21:00",
+        "Maintainer": " Alexis, hivi ",
+        "Description": " Η ναυαρχίδα του σταθμού, μια playlist για όλη την οικογένεια. "
+      },
+      {
+        "Name": "Alternative",
+        "Start": "22:00",
+        "Maintainer": " Alexis, Alice ",
+        "Description": " The emergence of the commercial 80's sound pallete, created a need to diverge from the pop sound. The repercusssions are still in effect.  "
+      }
+    ]
+  },
+  "Friday": {
+    "Zone": [
+      {
+        "Name": "Ballads",
+        "Start": "00:00",
+        "Maintainer": " Alexis, Kadilier, Ggalan, melpo ",
+        "Description": " Μπαλαντοειδή κλαψοκαψουροτράγουδα για μοναχικά άτομα. "
+      },
+      {
+        "Name": "ίουίου τσούκουτσούκου",
+        "Start": "01:00",
+        "Maintainer": " Melpo, Alexis ",
+        "Description": " Self-explanatory. "
+      },
+      {
+        "Name": "Experimental Dance Music",
+        "Start": "02:00",
+        "Maintainer": " Alexis ",
+        "Description": " Bit-given voltage-driven god-forgiven."
+      },
+      {
+        "Name": "Zapre",
+        "Start": "03:00",
+        "Maintainer": " Alexis ",
+        "Description": " Heroine sketches. "
+      },
+      {
+        "Name": "The Classical Era",
+        "Start": "05:00",
+        "Maintainer": " Alexis ",
+        "Description": " Haydn, Mozart, Beethoven και άλλα ματζοροειδή. "
+      },
+      {
+        "Name": "Swing",
+        "Start": "07:00",
+        "Maintainer": " Alexis ",
+        "Description": " It don't mean a thing, if it ain't got that swing.  "
+      },
+      {
+        "Name": "World Fusion",
+        "Start": "08:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tradition blended with jazz oriented witchcrafts expended.  "
+      },
+      {
+        "Name": "Punky Reggae Party",
+        "Start": "09:00",
+        "Maintainer": " Alexis ",
+        "Description": " This is a punky reggae party."
+      },
+      {
+        "Name": "Latin Jazz",
+        "Start": "11:00",
+        "Maintainer": " Alexis ",
+        "Description": " Rhythms and melodies from Latin America. "
+      },
+      {
+        "Name": "Zindia",
+        "Start": "12:00",
+        "Maintainer": " Alexis ",
+        "Description": " Indian influenced music, with some traditional ceremonies happening in between. "
+      },
+      {
+        "Name": "Jazz Fusion",
+        "Start": "14:00",
+        "Maintainer": " Alexis ",
+        "Description": " Jazz fused with everything, or everything fused with jazz. "
+      },
+      {
+        "Name": "Hardbop",
+        "Start": "16:00",
+        "Maintainer": " Alexis ",
+        "Description": " The sound of Hardbop. "
+      },
+      {
+        "Name": "Futurison",
+        "Start": "17:00",
+        "Maintainer": " Alexis ",
+        "Description": " Jazz Harmony with electronic beats.  "
+      },
+      {
+        "Name": "Metal",
+        "Start": "18:00",
+        "Maintainer": " Alexis, Hivi, Elias ",
+        "Description": " A metal is a chemical element that is an effective conductor of electricity and heat.   "
+      },
+      {
+        "Name": "The Power of Rock",
+        "Start": "19:00",
+        "Maintainer": " Alexis ",
+        "Description": " Pure power, pure rock. "
+      },
+      {
+        "Name": "HardProg",
+        "Start": "20:00",
+        "Maintainer": " Alexis, mickflemm ",
+        "Description": " Distorted progressive music. "
+      },
+      {
+        "Name": "Alternative",
+        "Start": "21:00",
+        "Maintainer": " Alexis, Alice ",
+        "Description": " The emergence of the commercial 80's sound pallete, created a need to diverge from the pop sound. The repercusssions are still in effect. "
+      },
+      {
+        "Name": "Post Rock",
+        "Start": "22:00",
+        "Maintainer": " Alexis, Hivi ",
+        "Description": " Sustain στις κιθάρες, ατμόσφαιρικα riffs και fuzz μέχρι αηδίας."
+      }
+    ]
+  },
+  "Saturday": {
+    "Zone": [
+      {
+        "Name": "Experimental Dance Music",
+        "Start": "00:00",
+        "Maintainer": " Alexis ",
+        "Description": " Bit-given voltage-driven god-forgiven. "
+      },
+      {
+        "Name": "Zapre",
+        "Start": "01:00",
+        "Maintainer": " Alexis ",
+        "Description": " Heroine sketches. "
+      },
+      {
+        "Name": "Psychedelia",
+        "Start": "02:00",
+        "Maintainer": " Alexis, hivi ",
+        "Description": " Η ναυαρχίδα του σταθμού, μια playlist για όλη την οικογένεια. "
+      },
+      {
+        "Name": "Νταρκίλες",
+        "Start": "04:00",
+        "Maintainer": " Alexis, Elias, Kadilier, Ggalan, Xanthi ",
+        "Description": " Μουσική του σκότους. "
+      },
+      {
+        "Name": "Southern Folk Rock",
+        "Start": "06:00",
+        "Maintainer": " Alexis ",
+        "Description": " Southernsounding folkrevolting music. Αλογατάρικα  "
+      },
+      {
+        "Name": "British Invasion",
+        "Start": "07:00",
+        "Maintainer": " Alexis ",
+        "Description": " Music from the brits during the 60's. "
+      },
+      {
+        "Name": "Baroque",
+        "Start": "08:00",
+        "Maintainer": " Alexis ",
+        "Description": " Counterpointing for religious purposes. "
+      },
+      {
+        "Name": "Funk",
+        "Start": "10:00",
+        "Maintainer": " Alexis ",
+        "Description": " Funk without Frank. "
+      },
+      {
+        "Name": "Guilty Pleasures",
+        "Start": "12:00",
+        "Maintainer": " Kadilier, melpo, alexis, Dedekind, Ggalan ",
+        "Description": " https://aeon.co/essays/against-guilty-pleasures-adorno-on-the-crimes-of-pop-culture "
+      },
+      {
+        "Name": "ZappaZone",
+        "Start": "13:00",
+        "Maintainer": " Alexis ",
+        "Description": " Music from his greatness. Francesco I love you. "
+      },
+      {
+        "Name": "Reggae music",
+        "Start": "14:00",
+        "Maintainer": " Alexis ",
+        "Description": " Jah Rastafari. Reggae music is protest. Blessings bless. "
+      },
+      {
+        "Name": "Punky Reggae Party",
+        "Start": "15:00",
+        "Maintainer": " Alexis ",
+        "Description": " This is a punky reggae party."
+      },
+      {
+        "Name": "Jazz Fusion",
+        "Start": "16:00",
+        "Maintainer": " Alexis ",
+        "Description": " Jazz fused with everything, or everything fused with jazz. "
+      },
+      {
+        "Name": "The Progressives",
+        "Start": "17:00",
+        "Maintainer": " Alexis, mickflemm ",
+        "Description": " The abolition of form. "
+      },
+      {
+        "Name": "Alternative",
+        "Start": "18:00",
+        "Maintainer": " Alexis, Alice ",
+        "Description": " The emergence of the commercial 80's sound pallete, created a need to diverge from the pop sound. The repercusssions are still in effect. "
+      },
+      {
+        "Name": "World Fusion",
+        "Start": "19:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tradition blended with jazz oriented witchcrafts expended.   "
+      },
+      {
+        "Name": "Tropicatronica",
+        "Start": "20:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tropical sounds with tronica feels. "
+      },
+      {
+        "Name": "Groovinhop",
+        "Start": "21:00",
+        "Maintainer": " Alexis ",
+        "Description": " Rappin' n' Groovin'. "
+      },
+      {
+        "Name": "Futurison",
+        "Start": "22:00",
+        "Maintainer": " Alexis ",
+        "Description": " The future is here. "
+      },
+      {
+        "Name": "Ballads",
+        "Start": "23:00",
+        "Maintainer": " Alexis, Kadilier, Dedekind Ggalan, melpo ",
+        "Description": " Μπαλαντοειδή κλαψοκαψουροτράγουδα για μοναχικά άτομα. "
+      }
+    ]
+  },
+  "Sunday": {
+    "Zone": [
+      {
+        "Name": "Ballads",
+        "Start": "00:00",
+        "Maintainer": " Alexis, Kadilier, Ggalan, melpo ",
+        "Description": " Μπαλαντοειδή κλαψοκαψουροτράγουδα για μοναχικά άτομα. "
+      },
+      {
+        "Name": "Ψυχεδέλειες",
+        "Start": "01:00",
+        "Maintainer": " Alexis, Hivi ",
+        "Description": " Η ναυαρχίδα του σταθμού, μια playlist για όλη την οικογένεια. "
+      },
+      {
+        "Name": "Experimental Dance Music",
+        "Start": "02:00",
+        "Maintainer": " Alexis ",
+        "Description": " Bit-given voltage-driven god-forgiven. "
+      },
+      {
+        "Name": "ίουίου τσούκουτσούκου",
+        "Start": "04:00",
+        "Maintainer": " Melpo, Alexis ",
+        "Description": " Self-explanatory. "
+      },
+      {
+        "Name": "Sklip",
+        "Start": "05:00",
+        "Maintainer": " Alexis ",
+        "Description": " Experimental uncategorizable music. Sorry for listening. "
+      },
+      {
+        "Name": "Chillatronica",
+        "Start": "06:00",
+        "Maintainer": " Alexis ",
+        "Description": " Downtempo, lo-fi, laid-back tronic music. "
+      },
+      {
+        "Name": "Bluegrass and Folks",
+        "Start": "07:00",
+        "Maintainer": " Alexis ",
+        "Description": " Traditional bluegrass with folk and country intrusions. "
+      },
+      {
+        "Name": "Gospel",
+        "Start": "08:00",
+        "Maintainer": " Alexis ",
+        "Description": " Old-school gospel and its modern day influences. "
+      },
+      {
+        "Name": "New Orleans",
+        "Start": "10:00",
+        "Maintainer": " Alexis ",
+        "Description": " The city that never sleeps. "
+      },
+      {
+        "Name": "Latin Jazz",
+        "Start": "12:00",
+        "Maintainer": " Alexis ",
+        "Description": " Rhythms and melodies from Latin America. "
+      },
+      {
+        "Name": "Zorn Zone",
+        "Start": "13:00",
+        "Maintainer": " Alexis ",
+        "Description": " Compositions from the great John Zorn. "
+      },
+      {
+        "Name": "World Fusion",
+        "Start": "14:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tradition blended with jazz oriented witchcrafts expended.  "
+      },
+      {
+        "Name": "Futurison",
+        "Start": "16:00",
+        "Maintainer": " Alexis ",
+        "Description": " Future music.  "
+      },
+      {
+        "Name": "Tropicatronica",
+        "Start": "17:00",
+        "Maintainer": " Alexis ",
+        "Description": " Tropical sounds with tronica feels. "
+      },
+      {
+        "Name": "Blues Rock",
+        "Start": "18:00",
+        "Maintainer": " Alexis, Elias ",
+        "Description": " Rocking with the Blues. "
+      },
+      {
+        "Name": "Mozart invades Britain",
+        "Start": "19:00",
+        "Maintainer": " Alexis, kadilier ",
+        "Description": " British Invasion describes the success certain british bands had, into the US mainstream. Incorporating classical songwriting into the blues soundscape, extended the possibilities of what rock music can be. "
+      },
+      {
+        "Name": "SouthernFolk Rock",
+        "Start": "20:00",
+        "Maintainer": " Alexis, Kadilier, Bam ",
+        "Description": " Southernsounding folkrevolting music. Αλογατάρικα  "
+      },
+      {
+        "Name": "Alternative",
+        "Start": "21:00",
+        "Maintainer": " Alexis, Alice ",
+        "Description": " The emergence of the commercial 80's sound pallete, created a need to diverge from the pop sound. The repercusssions are still in effect. "
+      },
+      {
+        "Name": "Ψυχεδέλειες",
+        "Start": "23:00",
+        "Maintainer": " Alexis, Hivi ",
+        "Description": " Η ναυαρχίδα του σταθμού, μια playlist για όλη την οικογένεια. "
+      }
+    ]
+  }
+}

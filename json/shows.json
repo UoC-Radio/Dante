@@ -1,0 +1,92 @@
+// example
+{
+    "Monday": [{
+        "Show": "Revolution no. 9",
+        "Producer": "Σάββας & Γιώργος",
+        "Start": "17.30",
+        "Duration" : "60"
+    }, {
+        "Show": "Τσαφ Στον Αέρα",
+        "Producer": "Τηγανίτης",
+        "Start": "19.00",
+        "Duration" : "120"
+    }],
+    
+    "Tuesday": [{
+        "Show": "Bubble Trouble",
+        "Producer": "Μερόπη",
+        "Start": "18.00",
+        "Duration" : "60"
+    }, {
+        "Show": "ElectroniC JukeBoX",
+        "Producer": "Μισό Λεπτό",
+        "Start": "19.30",
+        "Duration" : "120" 
+    },{
+        "Show": "Insomniac Jukebox",
+        "Producer": "paslou",
+        "Start": "22.00",
+        "Duration" : "120"    
+    }],
+    
+    "Wednesday": [
+	{
+	    "Show": "Ώρα κλασσική",
+        "Producer": "Ελα ντε",
+        "Start": "16.20",
+        "Duration" : "100"
+	},
+	{
+        "Show": "HipHop Podcast",
+        "Producer": "karabak",
+        "Start": "20.00",
+        "Duration" : "120"
+    }, {
+        "Show": "Φανκ με τον Φρανκ",
+        "Producer": "-",
+        "Start": "22.00",
+        "Duration" : "90"
+    }
+	],
+    
+    "Thursday": [{
+        "Show": "Στης κοντυλιάς τη στράτα",
+        "Producer": "Γιάννης & Γιώργος",
+        "Start": "22.00",
+        "Duration" : "90"
+    }],
+    
+    "Friday": [{
+        "Show": "Πλανεύτρα Ανατολή",
+        "Producer": "케이",
+        "Start": "17.30",
+        "Duration" : "60"
+    }, {
+        "Show": "Κάργα ρέγκε",
+        "Producer": "Grou & Raf",
+        "Start": "18.30",
+        "Duration" : "60"
+    },
+      {
+          "Show": "beforeStoa",
+          "Producer": "Όλοκαικάποιος",
+          "Start": "20.00",
+          "Duration" : "90"
+    }
+    ],
+    
+    "Saturday": [{
+        "Show": "Cineπιβάτες",
+        "Producer": "KOΠΚ",
+        "Start": "20.00",
+        "Duration" : "60"
+    }],
+
+    "Sunday": [{
+        "Show": "Orkz Attack",
+        "Producer": "Λητώ & iamtheBotBoss",
+        "Start": "21.00",
+        "Duration" : "60"
+    }]
+
+}
