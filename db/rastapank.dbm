@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2-alpha1" last-position="0,0" last-zoom="0.75" max-obj-count="24"
+	 default-schema="public" default-owner="postgres">
+<database name="rastapank_db" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="radio" layer="0" fill-color="#e1e1e1">
+	<role name="postgres"/>
+</schema>
+
+<table name="members" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[The radio station's members (people)]]></comment>
+	<position x="1120" y="380"/>
+	<column name="user_id" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[We leave this as an integer instead of serial so that it doesn't get set automaticaly by the DB. The idea is to match this id with the uid on the station's user registration/authentication backend. In our case that's the uid used on LDAP.]]></comment>
+	</column>
+	<column name="username" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[The username used on the registration/authentication system]]></comment>
+	</column>
+	<column name="real_name" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[User's real name]]></comment>
+	</column>
+	<constraint name="members_pk" type="pk-constr" table="radio.members">
+		<columns names="user_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="members_username_key" type="uq-constr" table="radio.members">
+		<columns names="username" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="week_days" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[The 7 days of the week]]></comment>
+	<position x="380" y="680"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="label">
+		<type name="varchar" length="0"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="0"/>
+	</column>
+	<constraint name="week_days_pk" type="pk-constr" table="radio.week_days">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•label•name⸣
+•Mon•Monday⸣
+•Tue•Tuesday⸣
+•Wed•Wednesday⸣
+•Thu•Thursday⸣
+•Fri•Friday⸣
+•Sat•Saturday⸣
+•Sun•Sunday]]>
+	</initial-data>
+</table>
+
+<table name="shows" layer="0" collapse-mode="2" max-obj-count="9">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Radio shows]]></comment>
+	<position x="340" y="40"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[Show title]]></comment>
+	</column>
+	<column name="description">
+		<type name="text" length="0"/>
+		<comment><![CDATA[Show's description]]></comment>
+	</column>
+	<column name="producer_nickname" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[How producers are referenced for their show - shown to the audience]]></comment>
+	</column>
+	<column name="logo_filename">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[Filepath of the show's logo image (optional)]]></comment>
+	</column>
+	<column name="active" not-null="true" default-value="true">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Active shows are shows that are still aired even out-of-schedule (e.g. on a per-case basis)]]></comment>
+	</column>
+	<column name="last_aired">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+		<comment><![CDATA[Last time the show aired]]></comment>
+	</column>
+	<column name="times_aired">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[How many times the show aired]]></comment>
+	</column>
+	<constraint name="shows_pk" type="pk-constr" table="radio.shows">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="show_producers" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="radio"/>
+	<comment><![CDATA[Each show has one or more producers, registered with their user ids
+
+Constraints:
+If a show is removed, remove all its producer entries
+Don't allow removing a member that's still associated with a show]]></comment>
+	<position x="860" y="80"/>
+
+	<customidxs object-type="column">
+		<object name="id_shows" index="1"/>
+		<object name="user_id_members" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="members_fk" index="1"/>
+		<object name="show_producers_pk" index="0"/>
+		<object name="shows_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="members are producers of many shows" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.members"
+	 dst-table="radio.show_producers"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="show has many producers" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.shows"
+	 dst-table="radio.show_producers"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<table name="show_urls" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Each show may have URLs associated with it (e.g. blog, facebook page etc)
+
+Constraints:
+If the show is removed, remove all URLs associated with it
+]]></comment>
+	<position x="0" y="140"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="url_uri" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[The url]]></comment>
+	</column>
+	<column name="url_text">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[Text to be displayed on the link]]></comment>
+	</column>
+	<constraint name="show_urls_pk" type="pk-constr" table="radio.show_urls">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_shows" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="shows_fk" index="0"/>
+	</customidxs>
+</table>
+
+<relationship name="a show has many urls" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#56554a"
+	 src-table="radio.shows"
+	 dst-table="radio.show_urls"
+	 src-required="false" dst-required="false"
+	del-action="CASCADE"/>
+
+<table name="show_weekdays" layer="0" collapse-mode="2" max-obj-count="6">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Shows aired on a weekly basis
+
+Constraints:
+If the show is removed, remove all shedule NOT NULL references to it
+Don't allow deleting a day (shouldn't happen anyway) if it contains scheduled shows
+]]></comment>
+	<position x="340" y="400"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="start_time" not-null="true">
+		<type name="time with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="duration" not-null="true">
+		<type name="interval" length="0" interval-type="MINUTE"/>
+	</column>
+	<constraint name="show_schedule_pk" type="pk-constr" table="radio.show_weekdays">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_shows" index="1"/>
+		<object name="id_week_days" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="shows_fk" index="1"/>
+		<object name="week_days_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="shows can be arranged in many timeslots" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#3a8d0e"
+	 src-table="radio.shows"
+	 dst-table="radio.show_weekdays"
+	 src-required="false" dst-required="false"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="one weekday contains many shows" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#aebffe"
+	 src-table="radio.week_days"
+	 dst-table="radio.show_weekdays"
+	 src-required="false" dst-required="false"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="21.1211" y="-29.236"/>
+	</label>
+</relationship>
+
+<table name="show_oneshot" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Shows aired once
+
+Constrints:
+If the show is removed, remove all one-shot schedule entries associated with it]]></comment>
+	<position x="700" y="420"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="scheduled_time" not-null="true">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+		<comment><![CDATA[Can be in the future]]></comment>
+	</column>
+	<column name="duration" not-null="true">
+		<type name="interval" length="0" interval-type="MINUTE"/>
+	</column>
+	<constraint name="shows_oneshot_pk" type="pk-constr" table="radio.show_oneshot">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_shows" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="shows_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="show can be schduled many times one shot" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#c2450b"
+	 src-table="radio.shows"
+	 dst-table="radio.show_oneshot"
+	 src-required="false" dst-required="false"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="105.129" y="-11.8857"/>
+	</label>
+</relationship>
+
+<table name="show_messages" layer="0" collapse-mode="2" max-obj-count="8">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Listener messages
+Notes: These are private messages sent from listeners to the show's producers (all of them). Producers can access those from the dashboard application. Also this is the only table that uses data from outsiders.
+
+Constraints:
+If the show is removed, remove all messages associated with it]]></comment>
+	<position x="0" y="340"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="received_datetime" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="user_agent" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[We want this to distinguish listeners using a browser or our mobile app]]></comment>
+	</column>
+	<column name="ip_addr" not-null="true">
+		<type name="inet" length="0"/>
+		<comment><![CDATA[Listener's IPv4 address]]></comment>
+	</column>
+	<column name="nickname" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[Listener's nickname]]></comment>
+	</column>
+	<column name="message" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="show_messages_pk" type="pk-constr" table="radio.show_messages">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_shows" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="shows_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="a show has many messages" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#0f3414"
+	 src-table="radio.shows"
+	 dst-table="radio.show_messages"
+	 src-required="false" dst-required="false"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="7.48261" y="-1.88566"/>
+	</label>
+</relationship>
+
+<table name="playlist_types" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<position x="1360" y="120"/>
+	<column name="id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="label" not-null="true">
+		<type name="varchar" length="0"/>
+	</column>
+	<column name="intermediate" default-value="false">
+		<type name="bool" length="0"/>
+	</column>
+	<column name="remote" default-value="true">
+		<type name="bool" length="0"/>
+	</column>
+	<constraint name="playlist_types_pk" type="pk-constr" table="radio.playlist_types">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<initial-data>
+<![CDATA[id•label•intermediate•remote⸣
+1•main••⸣
+2•intermediate•true•⸣
+3•fallback••false]]>
+	</initial-data>
+</table>
+
+<table name="playlists" layer="0" collapse-mode="2" max-obj-count="13">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Playlists
+
+
+Constraint: Don't allow removing a playlist type (shouldn't happen anyway) if there are playlists associated with it]]></comment>
+	<position x="1580" y="460"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[Short title e.g. "70s Funk"]]></comment>
+	</column>
+	<column name="file_path" not-null="true">
+		<type name="varchar" length="0"/>
+		<comment><![CDATA[Path to a .pls or .m3u file]]></comment>
+	</column>
+	<column name="fade_in_secs" default-value="2">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Duration of fade in in secs (zero for no fade-in)]]></comment>
+	</column>
+	<column name="fade_out_secs" default-value="2">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Duration of fade out in secs (zero for no fade-out)]]></comment>
+	</column>
+	<column name="min_level" default-value="0.0">
+		<type name="numeric" length="0"/>
+		<comment><![CDATA[Fader min level]]></comment>
+	</column>
+	<column name="max_level" default-value="1.0">
+		<type name="numeric" length="0"/>
+		<comment><![CDATA[Fader max level]]></comment>
+	</column>
+	<column name="shuffle" default-value="true">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[Shuffle songs or not]]></comment>
+	</column>
+	<column name="description">
+		<type name="text" length="0"/>
+		<comment><![CDATA[Short description text (optional)]]></comment>
+	</column>
+	<column name="comments">
+		<type name="text" length="0"/>
+		<comment><![CDATA[Comments text (optional, internal)]]></comment>
+	</column>
+	<constraint name="playlists_pk" type="pk-constr" table="radio.playlists">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="unique_title" type="uq-constr" table="radio.playlists">
+		<columns names="title" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_playlist_types" index="8"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="playlist_types_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="type of playlist" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#84d264"
+	 src-table="radio.playlist_types"
+	 dst-table="radio.playlists"
+	 src-required="false" dst-required="false"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="playlist_maintainers" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="radio"/>
+	<comment><![CDATA[Playlist maintainers
+
+Constraints:
+Don't allow deletion of a member that is referenced as a playlist maintainer
+If a playlist is removed, all its maintainer entries]]></comment>
+	<position x="980" y="600"/>
+
+	<customidxs object-type="column">
+		<object name="id_playlists" index="1"/>
+		<object name="user_id_members" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="members_fk" index="1"/>
+		<object name="playlist_maintainers_pk" index="0"/>
+		<object name="playlists_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="member maintains many playlists" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.members"
+	 dst-table="radio.playlist_maintainers"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="playlists is maintained by many members" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.playlists"
+	 dst-table="radio.playlist_maintainers"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="zones" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<comment><![CDATA[We use the term zone to represent a musical context, think of it as a "mood".]]></comment>
+	<position x="1160" y="1100"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="date_created" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="date_modified">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="character varying" length="0"/>
+		<comment><![CDATA[Short title, e.g. "Waking up"]]></comment>
+	</column>
+	<column name="description">
+		<type name="text" length="0"/>
+		<comment><![CDATA[Short description text (optional)]]></comment>
+	</column>
+	<column name="comments">
+		<type name="text" length="0"/>
+		<comment><![CDATA[Comments text (optional, internal)]]></comment>
+	</column>
+	<constraint name="zones_pkey" type="pk-constr" table="radio.zones">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="day_zones" layer="0" collapse-mode="2" max-obj-count="6">
+	<schema name="radio"/>
+	<comment><![CDATA[Each day is split into zones to represent different moods within the day.
+
+Constraints:
+Don't allow removing a day (this shouldn't happen anyway) if it still has zones scheduled
+If a zone is removed, remove all schedule entries referring to it]]></comment>
+	<position x="820" y="760"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="time_start" not-null="true">
+		<type name="time" length="0"/>
+	</column>
+	<column name="duration" not-null="true">
+		<type name="interval" length="0" interval-type="MINUTE"/>
+	</column>
+	<constraint name="day_zones_pk" type="pk-constr" table="radio.day_zones">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_week_days" index="2"/>
+		<object name="id_zones" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="week_days_fk" index="1"/>
+		<object name="zones_fk" index="0"/>
+	</customidxs>
+</table>
+
+<relationship name="a zone belongs to many weekdays" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.zones"
+	 dst-table="radio.day_zones"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="a weekday contains many zones" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.week_days"
+	 dst-table="radio.day_zones"
+	 src-required="true" dst-required="false"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="8.409" y="-19.9568"/>
+	</label>
+</relationship>
+
+<table name="zone_playlists" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="radio"/>
+	<comment><![CDATA[Table for main playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
+
+Constraints:
+If a zone is removed, remove all its playlist entries
+Don't allow removing a playlist still associated with a zone]]></comment>
+	<position x="1780" y="1280"/>
+	<column name="sched_weight" not-null="true">
+		<type name="numeric" length="0"/>
+		<comment><![CDATA[Scheduling weight for 'main' playlists. Must be  0 < weight <= 1 and the sum of all 'main' playlist weights on a zone must be 1]]></comment>
+	</column>
+	<constraint name="check_sched_weight" type="ck-constr" table="radio.zone_playlists">
+			<expression><![CDATA[sched_weight > 0.0 AND sched_weight <= 1.0]]></expression>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_playlists" index="1"/>
+		<object name="id_zones" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="playlists_fk" index="2"/>
+		<object name="zone_playlists_pk" index="0"/>
+		<object name="zones_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="zone many playlists" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.zones"
+	 dst-table="radio.zone_playlists"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="playlist in many zones" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.playlists"
+	 dst-table="radio.zone_playlists"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="zone_intermediate_playlists" layer="0" collapse-mode="2" max-obj-count="6">
+	<schema name="radio"/>
+	<comment><![CDATA[Table for intermediate playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
+
+Constraints:
+If a zone is removed, remove all its intermediate playlist entries
+Don't allow removing an intermediate playlist still associated with a zone]]></comment>
+	<position x="1980" y="920"/>
+	<column name="sched_interval_mins" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Scheduling interval for intermediate playlists in mins]]></comment>
+	</column>
+	<column name="sceduled_items_cardinality" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Number of items to shedule each time zero is a special case in which we don't schedule an intermediate playlist based on time but from a "hint" encoded in the main playlist]]></comment>
+	</column>
+	<constraint name="check_interval" type="ck-constr" table="radio.zone_intermediate_playlists">
+			<expression><![CDATA[sched_interval_mins > 0]]></expression>
+	</constraint>
+	<constraint name="check_cardinality" type="ck-constr" table="radio.zone_intermediate_playlists">
+			<expression><![CDATA[sceduled_items_cardinality >= 0]]></expression>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_playlists" index="0"/>
+		<object name="id_zones" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="playlists_fk" index="1"/>
+		<object name="zone_intermediate_playlists_pk" index="0"/>
+		<object name="zones_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="playlist in many zones as intermediate" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.playlists"
+	 dst-table="radio.zone_intermediate_playlists"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="7.46984" y="-25.0831"/>
+	</label>
+</relationship>
+
+<relationship name="zone has many intermediate" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.zones"
+	 dst-table="radio.zone_intermediate_playlists"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="143.488" y="-55.3019"/>
+	</label>
+</relationship>
+
+<table name="zone_fallback_playlist" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="radio"/>
+	<comment><![CDATA[Table for fallback playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
+
+Constraints:
+If a zone is removed, remove all its falback playlist entries
+Don't allow removing a fallback playlist still associated with a zone]]></comment>
+	<position x="2000" y="620"/>
+
+	<customidxs object-type="column">
+		<object name="id_playlists" index="1"/>
+		<object name="id_zones" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="playlists_fk" index="2"/>
+		<object name="zone_fallback_playlist_pk" index="0"/>
+		<object name="zones_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="zone has many fallbacks" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.zones"
+	 dst-table="radio.zone_fallback_playlist"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="-9.51219" y="-22.6764"/>
+	</label>
+</relationship>
+
+<relationship name="playlist in many zones as fallback" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.playlists"
+	 dst-table="radio.zone_fallback_playlist"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="zone_maintainers" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="radio"/>
+	<comment><![CDATA[Zone maintainers
+
+Constraints:
+Don't allow removing a member that is referenced as a zone maintainer
+If a zone is removed, remove all its maintainer entries]]></comment>
+	<position x="1280" y="720"/>
+
+	<customidxs object-type="column">
+		<object name="id_zones" index="1"/>
+		<object name="user_id_members" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="members_fk" index="1"/>
+		<object name="zone_maintainers_pk" index="0"/>
+		<object name="zones_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="member maintains many zones" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.members"
+	 dst-table="radio.zone_maintainers"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="zone maintained by many members" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="radio.zones"
+	 dst-table="radio.zone_maintainers"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+</dbmodel>
