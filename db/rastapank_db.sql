@@ -4,6 +4,9 @@
 -- Project Site: pgmodeler.io
 -- Model Author: ---
 
+SET check_function_bodies = false;
+-- ddl-end --
+
 
 -- Database creation must be done outside a multicommand file.
 -- These commands were put in this file only as a convenience.
@@ -86,7 +89,8 @@ CREATE TABLE radio.shows (
 	active boolean NOT NULL DEFAULT true,
 	last_aired timestamp with time zone,
 	times_aired integer,
-	CONSTRAINT shows_pk PRIMARY KEY (id)
+	CONSTRAINT shows_pk PRIMARY KEY (id),
+	CONSTRAINT name_unique UNIQUE (title)
 
 );
 -- ddl-end --
@@ -105,6 +109,8 @@ COMMENT ON COLUMN radio.shows.active IS 'Active shows are shows that are still a
 COMMENT ON COLUMN radio.shows.last_aired IS 'Last time the show aired';
 -- ddl-end --
 COMMENT ON COLUMN radio.shows.times_aired IS 'How many times the show aired';
+-- ddl-end --
+COMMENT ON CONSTRAINT name_unique ON radio.shows  IS 'Show name is unique';
 -- ddl-end --
 ALTER TABLE radio.shows OWNER TO postgres;
 -- ddl-end --
@@ -560,6 +566,27 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE radio.zone_maintainers ADD CONSTRAINT zones_fk FOREIGN KEY (id_zones)
 REFERENCES radio.zones (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
+-- ddl-end --
+
+-- object: radio.create_show | type: FUNCTION --
+-- DROP FUNCTION IF EXISTS radio.create_show(IN varchar,IN text,IN varchar,IN anyarray) CASCADE;
+CREATE FUNCTION radio.create_show (IN name varchar, IN description text, IN nickname varchar, IN producers anyarray)
+	RETURNS smallint
+	LANGUAGE plpgsql
+	VOLATILE 
+	CALLED ON NULL INPUT
+	SECURITY INVOKER
+	COST 1
+	AS $$
+insert into radio.shows(title, producer_nickname) values (name, nickname) returning id into show_id;
+	FOREACH x IN ARRAY producers
+  	LOOP
+    	raise notice 'Adding % to show %', x, name;
+		insert into radio.show_producers (user_id_members, id_shows) values (x, show_id);
+END LOOP;
+$$;
+-- ddl-end --
+ALTER FUNCTION radio.create_show(IN varchar,IN text,IN varchar,IN anyarray) OWNER TO postgres;
 -- ddl-end --
 
 

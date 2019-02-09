@@ -830,4 +830,38 @@ If a zone is removed, remove all its maintainer entries]]></comment>
 	</label>
 </relationship>
 
+<function name="create_show"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		execution-cost="1"
+		row-amount="0">
+	<schema name="radio"/>
+	<role name="postgres"/>
+	<language name="plpgsql" sql-disabled="true"/>
+	<return-type>
+	<type name="smallint" length="0"/>
+	</return-type>
+	<parameter name="name" in="true">
+		<type name="varchar" length="0"/>
+	</parameter>
+	<parameter name="description" in="true">
+		<type name="text" length="0"/>
+	</parameter>
+	<parameter name="nickname" in="true">
+		<type name="varchar" length="0"/>
+	</parameter>
+	<parameter name="producers" in="true">
+		<type name="anyarray" length="0"/>
+	</parameter>
+	<definition><![CDATA[insert into radio.shows(title, producer_nickname) values (name, nickname) returning id into show_id;
+	FOREACH x IN ARRAY producers
+  	LOOP
+    	raise notice 'Adding % to show %', x, name;
+		insert into radio.show_producers (user_id_members, id_shows) values (x, show_id);
+END LOOP;]]></definition>
+</function>
+
 </dbmodel>
