@@ -1,0 +1,9 @@
+[psql]
+dbname = "rastapank_db"
+host   = "snf-68642.vm.okeanos.grnet.gr"
+port   = 5432
+user   = "postgres"
+pass   = "S40KaAXwBVKXNS"
+schema = "radio"
+blacklist = ["migrations", "other"]
+sslmode = "disable"
