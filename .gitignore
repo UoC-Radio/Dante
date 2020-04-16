@@ -14,7 +14,9 @@
 # Idea project files
 .idea
 
-# Config file
+# Config files
 /.env
+/api/sqlboiler.toml
 # Models that are generated using sqlboiler
 /api/models/**/*.go
+
