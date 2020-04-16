@@ -16,3 +16,5 @@
 
 # Config file
 /.env
+# Models that are generated using sqlboiler
+/api/models/
