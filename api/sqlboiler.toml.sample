@@ -1,0 +1,9 @@
+[psql]
+dbname = ""
+host   = ""
+port   =
+user   = ""
+pass   = ""
+schema = ""
+blacklist = ["migrations", "other"]
+sslmode = "disable"
