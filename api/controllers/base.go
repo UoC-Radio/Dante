@@ -27,10 +27,10 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 		server.DB, err = sql.Open("postgres", DBURL)
 
 		if err != nil {
-			fmt.Printf("Cannot connect to %s database", Dbdriver)
+			fmt.Printf("Cannot connect to %s database\n", Dbdriver)
 			log.Fatal("This is the error:", err)
 		} else {
-			fmt.Printf("Connected to the %s database", Dbdriver)
+			fmt.Printf("Connected to the %s database\n", Dbdriver)
 		}
 	}
 
