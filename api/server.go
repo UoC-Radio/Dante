@@ -25,8 +25,9 @@ func Run() {
 	server.Initialize(os.Getenv("DB_DRIVER"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"), os.Getenv("DB_SEARCH_PATH"))
 
-	//utils.SyncToForum("../etc/memberslist.xml", server.DB)
-	// utils.MigrateFromPreviousSqlite("../etc/radioShows.db", server.DB)
+	//utils.SyncToForum("./etc/memberslist.xml", server.DB)
+	// utils.MigrateFromPreviousSqlite("./etc/radioShows.db", server.DB)
+	//utils.MigrateFromScheduleXML("./etc/schedule.xml", "etc/maintainers_replace", server.DB)
 
 	server.Run(":8080")
 }
