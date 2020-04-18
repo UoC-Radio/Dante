@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"Dante/api/intermediate"
 	"Dante/api/models"
+	"bufio"
 	"context"
 	"database/sql"
 	"encoding/xml"
@@ -15,6 +17,7 @@ import (
 	"github.com/volatiletech/sqlboiler/queries/qm"
 	"io/ioutil"
 	_ "io/ioutil"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -271,6 +274,129 @@ func MigrateFromPreviousSqlite(dbPath string, db *sql.DB) {
 
 	err = tx.Commit()
 	dieIf(err)
+}
+
+func customSplitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
+	if atEOF && len(data) == 0 {
+		return 0, nil, nil
+	}
+
+	if atEOF {
+		return len(data), data, nil
+	}
+
+	if i := strings.Index(string(data), "\n"); i >= 0 {
+		return i + 1, data[0:i], nil
+	}
+	return
+}
+
+func loadReplacements(path string) map[string]string {
+	// Solution from: https://stackoverflow.com/questions/55775085/turning-a-file-with-string-key-values-into-a-go-map
+	f, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	scanner.Split(customSplitFunc)
+
+	replacements := make(map[string]string)
+	for scanner.Scan() {
+		text := scanner.Text()
+		//Split scanner.Text() by "=" to split key and value
+		tokens := strings.Split(text, "=")
+		replacements[tokens[0]] = tokens[1]
+	}
+
+	return replacements
+}
+
+func createZone(z ws.Zone, replacementsPath string, tx *sql.Tx) {
+	new_zone := models.Zone{
+		Title:       z.Name,
+		Description: null.StringFrom(z.Description),
+		Comments:    null.StringFrom(z.Comment),
+	}
+
+	fmt.Println("Will create zone", new_zone.Title)
+
+	err := new_zone.Insert(context.Background(), tx, boil.Infer())
+	dieIf(err)
+
+	maintainers := strings.Split(z.Maintainer, ",")
+
+	same := loadReplacements(replacementsPath)
+
+	for _, u := range maintainers {
+		u = strings.TrimSpace(u)
+		if val, ok := same[u]; ok {
+			u = val
+		}
+
+		member, err := models.Members(qm.Where("username=?", u)).One(context.Background(), tx)
+
+		if err != nil {
+			fmt.Println("Wrong username: " + u)
+		} else {
+			new_zone.AddUserIDMemberMembers(context.Background(), tx, false, member)
+		}
+	}
+}
+
+func MigrateFromScheduleXML(xmlPath string, replacementsPath string, db *sql.DB) {
+	fmt.Println("Started migration")
+
+	// Open our xmlFile
+	xmlFile, err := os.Open(xmlPath)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Successfully Opened xml")
+	// defer the closing of our xmlFile so that we can parse it later on
+	defer xmlFile.Close()
+
+	// read our opened xmlFile as a byte array.
+	byteValue, _ := ioutil.ReadAll(xmlFile)
+
+	var schedule ws.Schedule
+	err = xml.Unmarshal(byteValue, &schedule)
+	dieIf(err)
+
+	// Fetch existing DB users and place them in a handy map
+	tx, err := db.BeginTx(context.Background(), nil)
+	dieIf(err)
+
+	days := []ws.Day{schedule.Mon, schedule.Tue, schedule.Wed, schedule.Thu, schedule.Fri, schedule.Sat, schedule.Sun}
+	for i, d := range days {
+		fmt.Println("Day:" + strconv.Itoa(i))
+		for _, z := range d.Zone {
+			zone, err := models.Zones(qm.Where("title=?", z.Name)).One(context.Background(), tx)
+
+			// Zone creation from the first occurence
+			if err != nil {
+				createZone(z, replacementsPath, tx)
+			} else {
+				fmt.Println(zone.Title + " already in database. Looking for playlists.")
+
+				fmt.Println(z.Main.Path)
+
+				for _, p := range z.Intermediate {
+					fmt.Println(p.Name)
+				}
+			}
+		}
+	}
+
+	err = tx.Commit()
+	dieIf(err)
+}
+
+func ExportSchedule(xmlPath string, db *sql.DB) {
+
 }
 
 func dieIf(err error) {
