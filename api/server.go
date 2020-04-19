@@ -5,9 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
-
 	"Dante/api/controllers"
+	"github.com/joho/godotenv"
 )
 
 var server = controllers.Server{}
