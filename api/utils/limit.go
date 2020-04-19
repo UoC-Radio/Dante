@@ -1,5 +1,6 @@
 /*
-Originally posted in: https://www.alexedwards.net/blog/how-to-rate-limit-http-requests
+Originally posted in: https://www.alexedwards.net/blog/how-to-rate-limit-http-requests.
+TODO: Consider replacing limiter to: https://github.com/uber-go/ratelimit
 
 Copyright (c) 2019 Alex Edwards
 
