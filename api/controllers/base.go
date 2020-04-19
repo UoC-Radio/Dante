@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
+	"Dante/api/utils"
 	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
-
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres database driver
+	_ "github.com/lib/pq"
 )
 
 type Server struct {
@@ -43,5 +43,5 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 
 func (server *Server) Run(addr string) {
 	fmt.Println("Listening to port 8080")
-	log.Fatal(http.ListenAndServe(addr, server.Router))
+	log.Fatal(http.ListenAndServe(addr, utils.Limit(server.Router)))
 }
