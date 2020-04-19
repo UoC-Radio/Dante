@@ -14,8 +14,11 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/weekdays/{id}/shows", middlewares.SetMiddlewareJSON(s.GetShowsOnWeekDay)).Methods("GET")
 	s.Router.HandleFunc("/weekdays/{id}/zones", middlewares.SetMiddlewareJSON(s.GetZonesOnWeekDay)).Methods("GET")
 
+	s.Router.HandleFunc("/shows", middlewares.SetMiddlewareIPFilter(s.CreateShow)).Methods("POST")
 	s.Router.HandleFunc("/shows", middlewares.SetMiddlewareIPFilter(s.GetShows)).Methods("GET")
 	s.Router.HandleFunc("/shows/{id}", middlewares.SetMiddlewareIPFilter(s.GetShow)).Methods("GET")
+	s.Router.HandleFunc("/shows/{id}", middlewares.SetMiddlewareIPFilter(s.UpdateShow)).Methods("PUT")
+	s.Router.HandleFunc("/shows/{id}", middlewares.SetMiddlewareIPFilter(s.DeleteShow)).Methods("DELETE")
 	s.Router.HandleFunc("/shows/{id}/producers", middlewares.SetMiddlewareIPFilter(s.GetShowProducers)).Methods("GET")
 
 	// Public
