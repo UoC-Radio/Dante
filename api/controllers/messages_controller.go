@@ -17,6 +17,12 @@ import (
 	"strconv"
 )
 
+/*
+Sample post:
+curl --header "Content-Type: application/json" \
+--request POST --data '{"nickname":"mitsos","message":"Hello, World!"}' \
+http://localhost:8080/shows/444/message
+*/
 func (server *Server) SendMessage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	showId, err := strconv.Atoi(vars["id"])
