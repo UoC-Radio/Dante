@@ -9,44 +9,78 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/volatiletech/null"
 	"github.com/volatiletech/sqlboiler/boil"
 	"github.com/volatiletech/sqlboiler/queries/qm"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 )
 
+/*
+Sample POST :
+curl -X POST -H 'Content-Type: multipart/form-data' -F "title=test_title" -F "producer_nickname=123" -F "logo_filename=@image.png" localhost:8080/shows
+*/
 func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		return
-	}
-
-	show := models.Show{}
-	err = json.Unmarshal(body, &show)
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		return
-	}
-
-	/* validate */
-	if show.Title == "" {
-		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required 'Title'"))
-		return
-	}
-	if show.ProducerNickname == "" {
-		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required 'ProducerNickname'"))
-		return
-	}
-
-	err = show.Insert(context.Background(), server.DB, boil.Infer())
+	err := r.ParseMultipartForm(32 << 20)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
+	show := models.Show{}
+
+	/* parse multipart-form values */
+	show.Title = r.FormValue("title")
+	if show.Title == "" {
+		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'title'"))
+		return
+	}
+
+	show.ProducerNickname = r.FormValue("producer_nickname")
+	if show.ProducerNickname == "" {
+		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'producer_nickname'"))
+		return
+	}
+
+	show.Description = null.String{String: r.FormValue("description"), Valid: true}
+	show.Active = true
+	show.LastAired = null.Time{}
+	show.TimesAired = null.Int{}
+
+	/* handle logo filename (multipart-form file) */
+	logoFile, handler, err := r.FormFile("logo_filename")
+	logoFileName := ""
+	if logoFile != nil {
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+		defer logoFile.Close()
+
+		/* store logo */
+		logoFileName = "/etc/logos" + handler.Filename                     // TODO remove hard-coded path
+		f, err := os.OpenFile(logoFileName, os.O_WRONLY|os.O_CREATE, 0666) //TODO check file is image
+		if err != nil {
+			formattedError := formaterror.FormatError(err.Error())
+			responses.ERROR(w, http.StatusInternalServerError, formattedError)
+			return
+		}
+
+		defer f.Close()
+		_, _ = io.Copy(f, logoFile)
+	}
+	show.LogoFilename = null.String{String: logoFileName, Valid: true}
+
+	//err = show.Insert(context.Background(), server.DB, boil.Infer())
+	//if err != nil {
+	//	formattedError := formaterror.FormatError(err.Error())
+	//	responses.ERROR(w, http.StatusInternalServerError, formattedError)
+	//	return
+	//}
 
 	responses.JSON(w, http.StatusOK, show)
 
