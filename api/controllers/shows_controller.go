@@ -62,7 +62,7 @@ func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 		defer logoFile.Close()
 
 		/* store logo */
-		logoFileName = "/etc/logos" + handler.Filename                     // TODO remove hard-coded path
+		logoFileName = "/etc/logos/" + handler.Filename                    // TODO remove hard-coded path
 		f, err := os.OpenFile(logoFileName, os.O_WRONLY|os.O_CREATE, 0666) //TODO check file is image
 		if err != nil {
 			formattedError := formaterror.FormatError(err.Error())
@@ -71,16 +71,21 @@ func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 		}
 
 		defer f.Close()
-		_, _ = io.Copy(f, logoFile)
+		_, err = io.Copy(f, logoFile)
+		if err != nil {
+			formattedError := formaterror.FormatError(err.Error())
+			responses.ERROR(w, http.StatusInternalServerError, formattedError)
+			return
+		}
 	}
 	show.LogoFilename = null.String{String: logoFileName, Valid: true}
 
-	//err = show.Insert(context.Background(), server.DB, boil.Infer())
-	//if err != nil {
-	//	formattedError := formaterror.FormatError(err.Error())
-	//	responses.ERROR(w, http.StatusInternalServerError, formattedError)
-	//	return
-	//}
+	err = show.Insert(context.Background(), server.DB, boil.Infer())
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
 
 	responses.JSON(w, http.StatusOK, show)
 
