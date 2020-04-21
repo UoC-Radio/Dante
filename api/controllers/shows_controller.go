@@ -7,76 +7,79 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
 	"github.com/volatiletech/null"
 	"github.com/volatiletech/sqlboiler/boil"
 	"github.com/volatiletech/sqlboiler/queries/qm"
 	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 )
 
 /*
 Sample POST :
-curl -X POST -H 'Content-Type: multipart/form-data' -F "title=test_title" -F "producer_nickname=123" -F "logo_filename=@image.png" localhost:8080/shows
+curl -X POST -H 'Content-Type: multipart/form-data' -F "title=testTitle" -F "producerNickname=testNick" -F "logoFilename=@image.png" localhost:8080/shows
 */
 func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseMultipartForm(32 << 20)
 	if err != nil {
-		formattedError := formaterror.FormatError(err.Error())
-		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+
 	show := models.Show{}
 
 	/* parse multipart-form values */
-	show.Title = r.FormValue("title")
+	decoder := schema.NewDecoder()
+	err = decoder.Decode(&show, r.PostForm)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
 	if show.Title == "" {
 		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'title'"))
 		return
 	}
 
-	show.ProducerNickname = r.FormValue("producer_nickname")
 	if show.ProducerNickname == "" {
-		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'producer_nickname'"))
+		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'ProducerNickname'"))
 		return
 	}
 
-	show.Description = null.String{String: r.FormValue("description"), Valid: true}
-	show.Active = true
-	show.LastAired = null.Time{}
-	show.TimesAired = null.Int{}
+	// if uq 'title' already exists
+	n, err := models.Shows(qm.Where("title=?", show.Title)).Count(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	if n > 0 {
+		responses.ERROR(w, http.StatusBadRequest, errors.New("'title' field value already exists"))
+		return
+	}
 
 	/* handle logo filename (multipart-form file) */
-	logoFile, handler, err := r.FormFile("logo_filename")
+	logoFile, handler, err := r.FormFile("logoFilename")
 	logoFileName := ""
 	if logoFile != nil {
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
 			return
 		}
-		defer logoFile.Close()
 
-		/* store logo */
-		logoFileName = "/etc/logos/" + handler.Filename                    // TODO remove hard-coded path
-		f, err := os.OpenFile(logoFileName, os.O_WRONLY|os.O_CREATE, 0666) //TODO check file is image
+		/* store logo image */
+		logoFileName, err = storeLogoImage(logoFile, handler)
 		if err != nil {
-			formattedError := formaterror.FormatError(err.Error())
-			responses.ERROR(w, http.StatusInternalServerError, formattedError)
+			responses.ERROR(w, http.StatusInternalServerError, err)
 			return
 		}
 
-		defer f.Close()
-		_, err = io.Copy(f, logoFile)
-		if err != nil {
-			formattedError := formaterror.FormatError(err.Error())
-			responses.ERROR(w, http.StatusInternalServerError, formattedError)
-			return
-		}
 	}
 	show.LogoFilename = null.String{String: logoFileName, Valid: true}
 
@@ -87,7 +90,7 @@ func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responses.JSON(w, http.StatusOK, show)
+	responses.JSON(w, http.StatusCreated, show)
 
 }
 
@@ -195,7 +198,6 @@ func (server *Server) DeleteShow(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Entity", fmt.Sprintf("%d", id))
 	responses.JSON(w, http.StatusNoContent, "")
 }
 
@@ -217,5 +219,58 @@ func (server *Server) GetShowProducers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.JSON(w, http.StatusOK, showProducers)
+
+}
+
+/*
+Updates a 'show/{id}' :
+	1. 'times_aired'++
+	2. 'last_aired' = time.Now()
+*/
+func (server *Server) UpdateGoLive(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	show, err := models.Shows(qm.Where("id=?", id)).One(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	/*update show*/
+	show.TimesAired = null.Int{Int: show.TimesAired.Int + 1, Valid: true}
+	show.LastAired = null.Time{Time: time.Now(), Valid: true}
+
+	_, err = show.Update(context.Background(), server.DB, boil.Infer())
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, show)
+
+}
+
+/* helper function */
+func storeLogoImage(file multipart.File, handler *multipart.FileHeader) (string, error) {
+
+	defer file.Close()
+
+	// TODO remove hard-coded path
+	// TODO check file is image
+	logoFileName := "/etc/logos/" + handler.Filename
+	f, err := os.OpenFile(logoFileName, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		return "", err
+	}
+
+	defer f.Close()
+	_, err = io.Copy(f, file)
+	if err != nil {
+		return "", err
+	}
+
+	return logoFileName, nil
 
 }
