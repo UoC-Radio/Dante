@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"Dante/api/utils"
 	"github.com/gorilla/mux"
@@ -42,6 +43,7 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 }
 
 func (server *Server) Run(addr string) {
-	fmt.Println("Listening to port 8080")
+	tokens := strings.Split(addr, ":")
+	fmt.Println("Listening to port " + tokens[1])
 	log.Fatal(http.ListenAndServe(addr, utils.Limit(server.Router)))
 }
