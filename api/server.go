@@ -28,5 +28,5 @@ func Run() {
 	// utils.MigrateFromPreviousSqlite("./etc/radioShows.db", server.DB)
 	//utils.MigrateFromScheduleXML("./etc/schedule.xml", "etc/maintainers_replace", server.DB)
 
-	server.Run(":8080")
+	server.Run(":" + os.Getenv("SERVER_PORT"))
 }
