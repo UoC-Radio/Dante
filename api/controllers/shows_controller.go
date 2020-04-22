@@ -18,12 +18,13 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
 /*
 Sample POST :
-curl -X POST -H 'Content-Type: multipart/form-data' -F "title=testTitle" -F "producerNickname=testNick" -F "logoFilename=@image.png" localhost:8080/shows
+curl -X POST -H 'Content-Type: multipart/form-data' -F "title=testTitle" -F "producerNickname=testNick" -F "logoFile=@image.png" localhost:8080/shows
 */
 func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 
@@ -65,7 +66,7 @@ func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 	}
 
 	/* handle logo filename (multipart-form file) */
-	logoFile, handler, err := r.FormFile("logoFilename")
+	logoFile, handler, err := r.FormFile("logoFile")
 	logoFileName := ""
 	if logoFile != nil {
 		if err != nil {
@@ -255,10 +256,18 @@ func (server *Server) UpdateGoLive(w http.ResponseWriter, r *http.Request) {
 /* helper function */
 func storeLogoImage(file multipart.File, handler *multipart.FileHeader) (string, error) {
 
+	/* check file type is image */
+	header := make([]byte, 512)
+	if _, err := file.Read(header); err != nil {
+		return "", err
+	}
+	if !strings.Contains(http.DetectContentType(header), "image") {
+		return "", errors.New("input file is not an image")
+	}
+
 	defer file.Close()
 
 	// TODO remove hard-coded path
-	// TODO check file is image
 	logoFileName := "/etc/logos/" + handler.Filename
 	f, err := os.OpenFile(logoFileName, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
