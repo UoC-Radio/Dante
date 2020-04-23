@@ -253,6 +253,30 @@ func (server *Server) UpdateGoLive(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (server *Server) SetActiveShow(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	show, err := models.Shows(qm.Where("id=?", id)).One(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	/*activate or deactivate show*/
+	show.Active = !strings.Contains(r.URL.Path, "deactivate")
+
+	_, err = show.Update(context.Background(), server.DB, boil.Infer())
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, show)
+
+}
+
 /* helper function */
 func storeLogoImage(file multipart.File, handler *multipart.FileHeader) (string, error) {
 
