@@ -24,7 +24,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/shows/{id}/deactivate", middlewares.SetMiddlewareIPFilter(s.SetActiveShow)).Methods("PUT")
 
 	s.Router.HandleFunc("/shows/{id}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET")
-	s.Router.HandleFunc("/shows/{id}/message", middlewares.SetMiddlewareIPFilter(s.SendMessage)).Methods("POST")
+	s.Router.HandleFunc("/shows/{id}/messages", middlewares.SetMiddlewareIPFilter(s.SendMessage)).Methods("POST")
 
 	// Public
 
