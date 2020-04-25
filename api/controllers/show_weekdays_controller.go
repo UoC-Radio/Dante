@@ -16,6 +16,10 @@ import (
 	"time"
 )
 
+/*
+Same POST:
+	curl --header "Content-Type: application/json" --request POST --data '{"id_shows":420,"duration":"2h", "start_time":"2081-02-01T12:51:00+00:02"}' http://localhost:8080/weekdays/5/shows
+*/
 func (server *Server) AddShowOnWeekday(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -78,10 +82,10 @@ func (server *Server) RemoveShowFromWeekday(w http.ResponseWriter, r *http.Reque
 
 	vars := mux.Vars(r)
 	weekDayId, err := strconv.Atoi(vars["id_weekday"])
-	showID, err := strconv.Atoi(vars["id_show"])
+	showId, err := strconv.Atoi(vars["id_show"])
 
 	// get weekday
-	showWeekday, err := models.ShowWeekdays(qm.Where("id_week_days=?", weekDayId), qm.Where("id_shows=?", showID)).One(context.Background(), server.DB)
+	showWeekday, err := models.ShowWeekdays(qm.Where("id_week_days=?", weekDayId), qm.Where("id_shows=?", showId)).One(context.Background(), server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
