@@ -23,6 +23,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/shows/{id}/activate", middlewares.SetMiddlewareIPFilter(s.SetActiveShow)).Methods("PUT")
 	s.Router.HandleFunc("/shows/{id}/deactivate", middlewares.SetMiddlewareIPFilter(s.SetActiveShow)).Methods("PUT")
 
+	s.Router.HandleFunc("/shows/{id}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET").Queries("page", "{page}").Name("Pagination")
 	s.Router.HandleFunc("/shows/{id}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET")
 	s.Router.HandleFunc("/shows/{id}/messages", middlewares.SetMiddlewareIPFilter(s.SendMessage)).Methods("POST")
 

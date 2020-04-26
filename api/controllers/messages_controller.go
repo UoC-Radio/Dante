@@ -61,8 +61,13 @@ func (server *Server) GetMessages(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	show_id := vars["id"]
+	page, found := vars["page"]
 
-	messages, err := models.ShowMessages(qm.Where("id_shows=?", show_id)).All(context.Background(), server.DB)
+	if found {
+		fmt.Println(page)
+	}
+
+	messages, err := models.ShowMessages(qm.Where("id_shows=?", show_id), qm.Limit(20), qm.Offset(20)).All(context.Background(), server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
