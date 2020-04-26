@@ -198,7 +198,6 @@ func (server *Server) DeleteShow(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-
 	responses.JSON(w, http.StatusNoContent, "")
 }
 
@@ -223,10 +222,74 @@ func (server *Server) GetShowProducers(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (server *Server) AddShowProducer(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	showId := vars["id"]
+	memberId := vars["user_id"]
+
+	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	member, err := models.Members(qm.Where("user_id=?", memberId)).One(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	err = show.AddUserIDMemberMembers(context.Background(), server.DB, false, member)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, "")
+
+}
+
+func (server *Server) AddOrRemoveShowProducer(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	showId := vars["id"]
+	memberId := vars["user_id"]
+
+	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	member, err := models.Members(qm.Where("user_id=?", memberId)).One(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	returnStatus := http.StatusBadRequest
+	if r.Method == "PUT" {
+		err = show.AddUserIDMemberMembers(context.Background(), server.DB, false, member)
+		if err != nil {
+			responses.ERROR(w, http.StatusBadRequest, err)
+			return
+		}
+		returnStatus = http.StatusOK
+	} else if r.Method == "DELETE" {
+		err = show.RemoveUserIDMemberMembers(context.Background(), server.DB, member)
+		if err != nil {
+			responses.ERROR(w, http.StatusBadRequest, err)
+			return
+		}
+		returnStatus = http.StatusNoContent
+	}
+	responses.JSON(w, returnStatus, "")
+}
+
 /*
-Updates a 'show/{id}' :
-	1. 'times_aired'++
-	2. 'last_aired' = time.Now()
+	1. times_aired++
+	2. last_aired = time.Now()
 */
 func (server *Server) UpdateGoLive(w http.ResponseWriter, r *http.Request) {
 
