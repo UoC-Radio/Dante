@@ -90,8 +90,8 @@ func (server *Server) AddShowOnWeekday(w http.ResponseWriter, r *http.Request) {
 func (server *Server) RemoveShowFromWeekday(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	weekDayId, err := strconv.Atoi(vars["id_weekday"])
-	showId, err := strconv.Atoi(vars["id_show"])
+	weekDayId, err := strconv.Atoi(vars["id"])
+	showId, err := strconv.Atoi(vars["show_id"])
 
 	// get weekday
 	showWeekday, err := models.ShowWeekdays(qm.Where("id_week_days=?", weekDayId), qm.Where("id_shows=?", showId)).One(context.Background(), server.DB)
