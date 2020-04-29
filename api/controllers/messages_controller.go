@@ -68,6 +68,7 @@ func (server *Server) GetMessages(w http.ResponseWriter, r *http.Request) {
 
 	if found {
 		pageIdx, err := strconv.Atoi(page)
+		pageIdx -= 1
 
 		if err != nil {
 			responses.ERROR(w, http.StatusBadRequest, err)
