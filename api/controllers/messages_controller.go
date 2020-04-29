@@ -62,21 +62,27 @@ func (server *Server) GetMessages(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	show_id := vars["id"]
 	page, found := vars["page"]
-	page_idx, err := strconv.Atoi(page)
 
-	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
-		return
-	}
+	var messages models.ShowMessageSlice
+	var err error
 
 	if found {
-		fmt.Println(page)
+		page_idx, err := strconv.Atoi(page)
+
+		if err != nil {
+			responses.ERROR(w, http.StatusBadRequest, err)
+			return
+		}
+
+		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id), qm.Limit(20), qm.Offset(page_idx*20)).All(context.Background(), server.DB)
+	} else {
+		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id)).All(context.Background(), server.DB)
 	}
 
-	messages, err := models.ShowMessages(qm.Where("id_shows=?", show_id), qm.Limit(20), qm.Offset(page_idx*20)).All(context.Background(), server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
+
 	responses.JSON(w, http.StatusOK, messages)
 }
