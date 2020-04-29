@@ -230,16 +230,25 @@ func (server *Server) AddOrRemoveShowProducer(w http.ResponseWriter, r *http.Req
 
 	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		if show == nil {
+			responses.ERROR(w, http.StatusBadRequest, errors.New("show does not exist"))
+		} else {
+			responses.ERROR(w, http.StatusBadRequest, err)
+		}
 		return
 	}
 
 	member, err := models.Members(qm.Where("user_id=?", memberId)).One(context.Background(), server.DB)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		if member == nil {
+			responses.ERROR(w, http.StatusBadRequest, errors.New("member does not exist"))
+		} else {
+			responses.ERROR(w, http.StatusBadRequest, err)
+		}
 		return
 	}
 
+	// PUT or DELETE show_producer
 	returnStatus := http.StatusBadRequest
 	if r.Method == "PUT" {
 		err = show.AddUserIDMemberMembers(context.Background(), server.DB, false, member)
@@ -257,6 +266,95 @@ func (server *Server) AddOrRemoveShowProducer(w http.ResponseWriter, r *http.Req
 		returnStatus = http.StatusNoContent
 	}
 	responses.JSON(w, returnStatus, "")
+}
+
+func (server *Server) AddShowUrl(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	showId, err := strconv.Atoi(vars["id"])
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+	}
+
+	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
+	if err != nil {
+		if show == nil {
+			responses.ERROR(w, http.StatusBadRequest, errors.New("show does not exist"))
+		} else {
+			responses.ERROR(w, http.StatusBadRequest, err)
+		}
+		return
+	}
+
+	showUrl := models.ShowURL{}
+	err = json.Unmarshal(body, &showUrl)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+
+	if showUrl.URLURI == "" {
+		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'url_uri'"))
+		return
+	}
+	showUrl.IDShows = null.Int{showId, true}
+
+	err = showUrl.Insert(context.Background(), server.DB, boil.Infer())
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusCreated, showUrl)
+
+}
+
+func (server *Server) GetShowUrls(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	showId, err := strconv.Atoi(vars["id"])
+
+	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
+	if err != nil {
+		if show == nil {
+			responses.ERROR(w, http.StatusBadRequest, errors.New("show does not exist"))
+		} else {
+			responses.ERROR(w, http.StatusBadRequest, err)
+		}
+		return
+	}
+
+	showUrls, err := show.IDShowShowUrls(qm.Where("id_shows=?", showId)).All(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, showUrls)
+
+}
+
+func (server *Server) RemoveShowUrl(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	showId, err := strconv.Atoi(vars["id"])
+
+	showUrl, err := models.ShowUrls(qm.Where("id_shows=?", showId)).All(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	_, err = showUrl.DeleteAll(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusNoContent, "")
+
 }
 
 /*

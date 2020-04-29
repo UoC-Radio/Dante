@@ -22,6 +22,9 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/shows/{id}/producers", middlewares.SetMiddlewareIPFilter(s.GetShowProducers)).Methods("GET")
 	s.Router.HandleFunc("/shows/{id}/producers/{user_id}", middlewares.SetMiddlewareIPFilter(s.AddOrRemoveShowProducer)).Methods("PUT")
 	s.Router.HandleFunc("/shows/{id}/producers/{user_id}", middlewares.SetMiddlewareIPFilter(s.AddOrRemoveShowProducer)).Methods("DELETE")
+	s.Router.HandleFunc("/shows/{id}/urls", middlewares.SetMiddlewareIPFilter(s.GetShowUrls)).Methods("GET")
+	s.Router.HandleFunc("/shows/{id}/urls", middlewares.SetMiddlewareIPFilter(s.AddShowUrl)).Methods("POST")
+	s.Router.HandleFunc("/shows/{id}/urls", middlewares.SetMiddlewareIPFilter(s.RemoveShowUrl)).Methods("DELETE")
 
 	s.Router.HandleFunc("/shows/{id}/golive", middlewares.SetMiddlewareIPFilter(s.UpdateGoLive)).Methods("PUT")
 	s.Router.HandleFunc("/shows/{id}/activate", middlewares.SetMiddlewareIPFilter(s.SetActiveShow)).Methods("PUT")
