@@ -75,7 +75,7 @@ func (server *Server) GetMessages(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id), qm.Limit(20), qm.Offset(pageIdx*20)).All(context.Background(), server.DB)
+		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id), qm.OrderBy("received_datetime DESC"), qm.Limit(20), qm.Offset(pageIdx*20)).All(context.Background(), server.DB)
 	} else {
 		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id)).All(context.Background(), server.DB)
 	}
