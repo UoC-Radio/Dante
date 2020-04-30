@@ -11,6 +11,7 @@ func (s *Server) initializeRoutes() {
 
 	// Users routes
 	s.Router.HandleFunc("/members/{username}", middlewares.SetMiddlewareIPFilter(s.GetMember)).Methods("GET")
+	s.Router.HandleFunc("/members/{username}/shows", middlewares.SetMiddlewareIPFilter(s.GetMemberShows)).Methods("GET")
 
 	s.Router.HandleFunc("/weekdays/{id:[1-7]}/shows", middlewares.SetMiddlewareJSON(s.GetShowsWeekDay)).Methods("GET")
 	s.Router.HandleFunc("/weekdays/{id:[1-7]}/shows", middlewares.SetMiddlewareJSON(s.AddShowOnWeekday)).Methods("POST")

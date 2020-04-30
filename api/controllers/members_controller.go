@@ -22,3 +22,23 @@ func (server *Server) GetMember(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, member)
 }
+
+func (server *Server) GetMemberShows(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	username := vars["username"]
+	member, err := models.Members(qm.Where("username=?", username)).One(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	shows, err := member.IDShowShows().All(context.Background(), server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	responses.JSON(w, http.StatusOK, shows)
+}
