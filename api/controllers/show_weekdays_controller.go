@@ -33,7 +33,7 @@ func (server *Server) AddShowOnWeekday(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !exists {
-		responses.ERROR(w, http.StatusBadRequest, errors.New("weekday does not exist"))
+		responses.ERROR(w, http.StatusBadRequest, errors.New("weekday id not found"))
 		return
 	}
 
@@ -58,14 +58,14 @@ func (server *Server) AddShowOnWeekday(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !exists {
-		responses.ERROR(w, http.StatusNotFound, errors.New("show does not exist"))
+		responses.ERROR(w, http.StatusNotFound, errors.New("show id not found"))
 		return
 	}
 
 	//parse duration
 	_, err = time.ParseDuration(showWeekday.Duration)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 

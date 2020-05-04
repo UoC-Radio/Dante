@@ -45,7 +45,7 @@ func (server *Server) CreateShow(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if show.Title == "" {
-		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'title'"))
+		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required 'Title'"))
 		return
 	}
 
@@ -231,7 +231,7 @@ func (server *Server) AddOrRemoveShowProducer(w http.ResponseWriter, r *http.Req
 	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
 	if err != nil {
 		if show == nil {
-			responses.ERROR(w, http.StatusBadRequest, errors.New("show does not exist"))
+			responses.ERROR(w, http.StatusBadRequest, errors.New("show id not found"))
 		} else {
 			responses.ERROR(w, http.StatusBadRequest, err)
 		}
@@ -241,7 +241,7 @@ func (server *Server) AddOrRemoveShowProducer(w http.ResponseWriter, r *http.Req
 	member, err := models.Members(qm.Where("user_id=?", memberId)).One(context.Background(), server.DB)
 	if err != nil {
 		if member == nil {
-			responses.ERROR(w, http.StatusBadRequest, errors.New("member does not exist"))
+			responses.ERROR(w, http.StatusBadRequest, errors.New("member id not found"))
 		} else {
 			responses.ERROR(w, http.StatusBadRequest, err)
 		}
@@ -281,7 +281,7 @@ func (server *Server) AddShowUrl(w http.ResponseWriter, r *http.Request) {
 	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
 	if err != nil {
 		if show == nil {
-			responses.ERROR(w, http.StatusBadRequest, errors.New("show does not exist"))
+			responses.ERROR(w, http.StatusBadRequest, errors.New("show id not found"))
 		} else {
 			responses.ERROR(w, http.StatusBadRequest, err)
 		}
@@ -296,7 +296,7 @@ func (server *Server) AddShowUrl(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if showUrl.URLURI == "" {
-		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required field 'url_uri'"))
+		responses.ERROR(w, http.StatusUnprocessableEntity, errors.New("required 'url_uri'"))
 		return
 	}
 	showUrl.IDShows = null.Int{showId, true}
@@ -319,7 +319,7 @@ func (server *Server) GetShowUrls(w http.ResponseWriter, r *http.Request) {
 	show, err := models.Shows(qm.Where("id=?", showId)).One(context.Background(), server.DB)
 	if err != nil {
 		if show == nil {
-			responses.ERROR(w, http.StatusBadRequest, errors.New("show does not exist"))
+			responses.ERROR(w, http.StatusBadRequest, errors.New("show id not found"))
 		} else {
 			responses.ERROR(w, http.StatusBadRequest, err)
 		}

@@ -36,4 +36,10 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET").Queries("page", "{page:[1-9][0-9]*}").Name("Pagination")
 	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET")
 	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/messages", middlewares.SetMiddlewareIPFilter(s.SendMessage)).Methods("POST")
+
+	s.Router.HandleFunc("/oneshots", middlewares.SetMiddlewareIPFilter(s.CreateOneShot)).Methods("POST")
+	s.Router.HandleFunc("/oneshots/{id:"+idRegEx+"}", middlewares.SetMiddlewareIPFilter(s.GetOneShot)).Methods("GET")
+	s.Router.HandleFunc("/oneshots/{id:"+idRegEx+"}", middlewares.SetMiddlewareIPFilter(s.DeleteOneShot)).Methods("DELETE")
+	s.Router.HandleFunc("/oneshots/shows/{id:"+idRegEx+"}", middlewares.SetMiddlewareIPFilter(s.GetShowOneShots)).Methods("GET")
+
 }
