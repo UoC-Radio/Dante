@@ -1,6 +1,6 @@
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
--- pgModeler  version: 0.9.2-alpha1
--- PostgreSQL version: 11.0
+-- pgModeler  version: 0.9.1
+-- PostgreSQL version: 10.0
 -- Project Site: pgmodeler.io
 -- Model Author: ---
 
@@ -28,7 +28,7 @@ SET search_path TO pg_catalog,public,radio;
 
 -- object: radio.members | type: TABLE --
 -- DROP TABLE IF EXISTS radio.members CASCADE;
-CREATE TABLE radio.members (
+CREATE TABLE radio.members(
 	user_id integer NOT NULL,
 	username varchar NOT NULL,
 	real_name varchar NOT NULL,
@@ -50,7 +50,7 @@ ALTER TABLE radio.members OWNER TO postgres;
 
 -- object: radio.week_days | type: TABLE --
 -- DROP TABLE IF EXISTS radio.week_days CASCADE;
-CREATE TABLE radio.week_days (
+CREATE TABLE radio.week_days(
 	id serial NOT NULL,
 	label varchar,
 	name varchar,
@@ -80,7 +80,7 @@ INSERT INTO radio.week_days (id, label, name) VALUES (DEFAULT, E'Sun', E'Sunday'
 
 -- object: radio.shows | type: TABLE --
 -- DROP TABLE IF EXISTS radio.shows CASCADE;
-CREATE TABLE radio.shows (
+CREATE TABLE radio.shows(
 	id serial NOT NULL,
 	title varchar NOT NULL,
 	description text,
@@ -117,7 +117,7 @@ ALTER TABLE radio.shows OWNER TO postgres;
 
 -- object: radio.show_producers | type: TABLE --
 -- DROP TABLE IF EXISTS radio.show_producers CASCADE;
-CREATE TABLE radio.show_producers (
+CREATE TABLE radio.show_producers(
 	user_id_members integer NOT NULL,
 	id_shows integer NOT NULL,
 	CONSTRAINT show_producers_pk PRIMARY KEY (user_id_members,id_shows)
@@ -147,7 +147,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- object: radio.show_urls | type: TABLE --
 -- DROP TABLE IF EXISTS radio.show_urls CASCADE;
-CREATE TABLE radio.show_urls (
+CREATE TABLE radio.show_urls(
 	id serial NOT NULL,
 	id_shows integer,
 	url_uri varchar NOT NULL,
@@ -178,12 +178,12 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- object: radio.show_weekdays | type: TABLE --
 -- DROP TABLE IF EXISTS radio.show_weekdays CASCADE;
-CREATE TABLE radio.show_weekdays (
+CREATE TABLE radio.show_weekdays(
 	id serial NOT NULL,
 	id_shows integer,
-	id_week_days integer,
 	start_time time with time zone NOT NULL,
 	duration interval MINUTE  NOT NULL,
+	id_week_days integer,
 	CONSTRAINT show_schedule_pk PRIMARY KEY (id)
 
 );
@@ -214,7 +214,7 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- object: radio.show_oneshot | type: TABLE --
 -- DROP TABLE IF EXISTS radio.show_oneshot CASCADE;
-CREATE TABLE radio.show_oneshot (
+CREATE TABLE radio.show_oneshot(
 	id serial NOT NULL,
 	id_shows integer,
 	scheduled_time timestamp with time zone NOT NULL,
@@ -242,7 +242,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- object: radio.show_messages | type: TABLE --
 -- DROP TABLE IF EXISTS radio.show_messages CASCADE;
-CREATE TABLE radio.show_messages (
+CREATE TABLE radio.show_messages(
 	id serial NOT NULL,
 	id_shows integer,
 	received_datetime timestamp with time zone DEFAULT now(),
@@ -278,7 +278,7 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- object: radio.playlist_types | type: TABLE --
 -- DROP TABLE IF EXISTS radio.playlist_types CASCADE;
-CREATE TABLE radio.playlist_types (
+CREATE TABLE radio.playlist_types(
 	id integer NOT NULL,
 	label varchar NOT NULL,
 	intermediate bool DEFAULT false,
@@ -299,7 +299,7 @@ INSERT INTO radio.playlist_types (id, label, intermediate, remote) VALUES (E'3',
 
 -- object: radio.playlists | type: TABLE --
 -- DROP TABLE IF EXISTS radio.playlists CASCADE;
-CREATE TABLE radio.playlists (
+CREATE TABLE radio.playlists(
 	id serial NOT NULL,
 	title varchar NOT NULL,
 	file_path varchar NOT NULL,
@@ -351,7 +351,7 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- object: radio.playlist_maintainers | type: TABLE --
 -- DROP TABLE IF EXISTS radio.playlist_maintainers CASCADE;
-CREATE TABLE radio.playlist_maintainers (
+CREATE TABLE radio.playlist_maintainers(
 	user_id_members integer NOT NULL,
 	id_playlists integer NOT NULL,
 	CONSTRAINT playlist_maintainers_pk PRIMARY KEY (user_id_members,id_playlists)
@@ -379,38 +379,38 @@ REFERENCES radio.playlists (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: radio.zones | type: TABLE --
--- DROP TABLE IF EXISTS radio.zones CASCADE;
-CREATE TABLE radio.zones (
+-- object: radio.combo_playlists | type: TABLE --
+-- DROP TABLE IF EXISTS radio.combo_playlists CASCADE;
+CREATE TABLE radio.combo_playlists(
 	id serial NOT NULL,
 	date_created timestamp with time zone DEFAULT now(),
 	date_modified timestamp with time zone,
 	title character varying NOT NULL,
 	description text,
 	comments text,
-	CONSTRAINT zones_pkey PRIMARY KEY (id)
+	CONSTRAINT combo_playlists_pkey PRIMARY KEY (id)
 
 );
 -- ddl-end --
-COMMENT ON TABLE radio.zones IS 'We use the term zone to represent a musical context, think of it as a "mood".';
+COMMENT ON TABLE radio.combo_playlists IS 'We use the term zone to represent a musical context, think of it as a "mood".';
 -- ddl-end --
-COMMENT ON COLUMN radio.zones.title IS 'Short title, e.g. "Waking up"';
+COMMENT ON COLUMN radio.combo_playlists.title IS 'Short title, e.g. "Waking up"';
 -- ddl-end --
-COMMENT ON COLUMN radio.zones.description IS 'Short description text (optional)';
+COMMENT ON COLUMN radio.combo_playlists.description IS 'Short description text (optional)';
 -- ddl-end --
-COMMENT ON COLUMN radio.zones.comments IS 'Comments text (optional, internal)';
+COMMENT ON COLUMN radio.combo_playlists.comments IS 'Comments text (optional, internal)';
 -- ddl-end --
-ALTER TABLE radio.zones OWNER TO postgres;
+ALTER TABLE radio.combo_playlists OWNER TO postgres;
 -- ddl-end --
 
 -- object: radio.day_zones | type: TABLE --
 -- DROP TABLE IF EXISTS radio.day_zones CASCADE;
-CREATE TABLE radio.day_zones (
+CREATE TABLE radio.day_zones(
 	id serial NOT NULL,
-	id_zones integer NOT NULL,
-	id_week_days integer NOT NULL,
 	time_start time NOT NULL,
 	duration interval MINUTE  NOT NULL,
+	id_week_days integer NOT NULL,
+	id_combo_playlists integer NOT NULL,
 	CONSTRAINT day_zones_pk PRIMARY KEY (id)
 
 );
@@ -422,10 +422,10 @@ Don''t allow removing a day (this shouldn''t happen anyway) if it still has zone
 If a zone is removed, remove all schedule entries referring to it';
 -- ddl-end --
 
--- object: zones_fk | type: CONSTRAINT --
--- ALTER TABLE radio.day_zones DROP CONSTRAINT IF EXISTS zones_fk CASCADE;
-ALTER TABLE radio.day_zones ADD CONSTRAINT zones_fk FOREIGN KEY (id_zones)
-REFERENCES radio.zones (id) MATCH FULL
+-- object: combo_playlists_fk | type: CONSTRAINT --
+-- ALTER TABLE radio.day_zones DROP CONSTRAINT IF EXISTS combo_playlists_fk CASCADE;
+ALTER TABLE radio.day_zones ADD CONSTRAINT combo_playlists_fk FOREIGN KEY (id_combo_playlists)
+REFERENCES radio.combo_playlists (id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
@@ -438,11 +438,11 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- object: radio.zone_playlists | type: TABLE --
 -- DROP TABLE IF EXISTS radio.zone_playlists CASCADE;
-CREATE TABLE radio.zone_playlists (
-	id_zones integer NOT NULL,
-	id_playlists integer NOT NULL,
+CREATE TABLE radio.zone_playlists(
 	sched_weight numeric NOT NULL,
-	CONSTRAINT zone_playlists_pk PRIMARY KEY (id_zones,id_playlists),
+	id_playlists integer NOT NULL,
+	id_combo_playlists integer NOT NULL,
+	CONSTRAINT zone_playlists_pk PRIMARY KEY (id_combo_playlists,id_playlists),
 	CONSTRAINT check_sched_weight CHECK (sched_weight > 0.0 AND sched_weight <= 1.0)
 
 );
@@ -456,10 +456,10 @@ Don''t allow removing a playlist still associated with a zone';
 COMMENT ON COLUMN radio.zone_playlists.sched_weight IS 'Scheduling weight for ''main'' playlists. Must be  0 < weight <= 1 and the sum of all ''main'' playlist weights on a zone must be 1';
 -- ddl-end --
 
--- object: zones_fk | type: CONSTRAINT --
--- ALTER TABLE radio.zone_playlists DROP CONSTRAINT IF EXISTS zones_fk CASCADE;
-ALTER TABLE radio.zone_playlists ADD CONSTRAINT zones_fk FOREIGN KEY (id_zones)
-REFERENCES radio.zones (id) MATCH FULL
+-- object: combo_playlists_fk | type: CONSTRAINT --
+-- ALTER TABLE radio.zone_playlists DROP CONSTRAINT IF EXISTS combo_playlists_fk CASCADE;
+ALTER TABLE radio.zone_playlists ADD CONSTRAINT combo_playlists_fk FOREIGN KEY (id_combo_playlists)
+REFERENCES radio.combo_playlists (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
@@ -470,84 +470,84 @@ REFERENCES radio.playlists (id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: radio.zone_intermediate_playlists | type: TABLE --
--- DROP TABLE IF EXISTS radio.zone_intermediate_playlists CASCADE;
-CREATE TABLE radio.zone_intermediate_playlists (
+-- object: radio.combo_playlist_intermediate | type: TABLE --
+-- DROP TABLE IF EXISTS radio.combo_playlist_intermediate CASCADE;
+CREATE TABLE radio.combo_playlist_intermediate(
 	id_playlists integer NOT NULL,
-	id_zones integer NOT NULL,
 	sched_interval_mins integer NOT NULL,
 	sceduled_items_cardinality integer NOT NULL,
-	CONSTRAINT zone_intermediate_playlists_pk PRIMARY KEY (id_playlists,id_zones),
+	id_combo_playlists integer NOT NULL,
 	CONSTRAINT check_interval CHECK (sched_interval_mins > 0),
-	CONSTRAINT check_cardinality CHECK (sceduled_items_cardinality >= 0)
+	CONSTRAINT check_cardinality CHECK (sceduled_items_cardinality >= 0),
+	CONSTRAINT combo_playlist_intermediate_pk PRIMARY KEY (id_playlists,id_combo_playlists)
 
 );
 -- ddl-end --
-COMMENT ON TABLE radio.zone_intermediate_playlists IS 'Table for intermediate playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
+COMMENT ON TABLE radio.combo_playlist_intermediate IS 'Table for intermediate playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
 
 Constraints:
 If a zone is removed, remove all its intermediate playlist entries
 Don''t allow removing an intermediate playlist still associated with a zone';
 -- ddl-end --
-COMMENT ON COLUMN radio.zone_intermediate_playlists.sched_interval_mins IS 'Scheduling interval for intermediate playlists in mins';
+COMMENT ON COLUMN radio.combo_playlist_intermediate.sched_interval_mins IS 'Scheduling interval for intermediate playlists in mins';
 -- ddl-end --
-COMMENT ON COLUMN radio.zone_intermediate_playlists.sceduled_items_cardinality IS 'Number of items to shedule each time zero is a special case in which we don''t schedule an intermediate playlist based on time but from a "hint" encoded in the main playlist';
+COMMENT ON COLUMN radio.combo_playlist_intermediate.sceduled_items_cardinality IS 'Number of items to shedule each time zero is a special case in which we don''t schedule an intermediate playlist based on time but from a "hint" encoded in the main playlist';
 -- ddl-end --
 
 -- object: playlists_fk | type: CONSTRAINT --
--- ALTER TABLE radio.zone_intermediate_playlists DROP CONSTRAINT IF EXISTS playlists_fk CASCADE;
-ALTER TABLE radio.zone_intermediate_playlists ADD CONSTRAINT playlists_fk FOREIGN KEY (id_playlists)
+-- ALTER TABLE radio.combo_playlist_intermediate DROP CONSTRAINT IF EXISTS playlists_fk CASCADE;
+ALTER TABLE radio.combo_playlist_intermediate ADD CONSTRAINT playlists_fk FOREIGN KEY (id_playlists)
 REFERENCES radio.playlists (id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: zones_fk | type: CONSTRAINT --
--- ALTER TABLE radio.zone_intermediate_playlists DROP CONSTRAINT IF EXISTS zones_fk CASCADE;
-ALTER TABLE radio.zone_intermediate_playlists ADD CONSTRAINT zones_fk FOREIGN KEY (id_zones)
-REFERENCES radio.zones (id) MATCH FULL
+-- object: combo_playlists_fk | type: CONSTRAINT --
+-- ALTER TABLE radio.combo_playlist_intermediate DROP CONSTRAINT IF EXISTS combo_playlists_fk CASCADE;
+ALTER TABLE radio.combo_playlist_intermediate ADD CONSTRAINT combo_playlists_fk FOREIGN KEY (id_combo_playlists)
+REFERENCES radio.combo_playlists (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: radio.zone_fallback_playlist | type: TABLE --
--- DROP TABLE IF EXISTS radio.zone_fallback_playlist CASCADE;
-CREATE TABLE radio.zone_fallback_playlist (
-	id_zones integer NOT NULL,
+-- object: radio.combo_playlist_fallback | type: TABLE --
+-- DROP TABLE IF EXISTS radio.combo_playlist_fallback CASCADE;
+CREATE TABLE radio.combo_playlist_fallback(
 	id_playlists integer NOT NULL,
-	CONSTRAINT zone_fallback_playlist_pk PRIMARY KEY (id_zones,id_playlists)
+	id_combo_playlists integer NOT NULL,
+	CONSTRAINT combo_playlist_fallback_pk PRIMARY KEY (id_combo_playlists,id_playlists)
 
 );
 -- ddl-end --
-COMMENT ON TABLE radio.zone_fallback_playlist IS 'Table for fallback playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
+COMMENT ON TABLE radio.combo_playlist_fallback IS 'Table for fallback playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
 
 Constraints:
 If a zone is removed, remove all its falback playlist entries
 Don''t allow removing a fallback playlist still associated with a zone';
 -- ddl-end --
 
--- object: zones_fk | type: CONSTRAINT --
--- ALTER TABLE radio.zone_fallback_playlist DROP CONSTRAINT IF EXISTS zones_fk CASCADE;
-ALTER TABLE radio.zone_fallback_playlist ADD CONSTRAINT zones_fk FOREIGN KEY (id_zones)
-REFERENCES radio.zones (id) MATCH FULL
+-- object: combo_playlists_fk | type: CONSTRAINT --
+-- ALTER TABLE radio.combo_playlist_fallback DROP CONSTRAINT IF EXISTS combo_playlists_fk CASCADE;
+ALTER TABLE radio.combo_playlist_fallback ADD CONSTRAINT combo_playlists_fk FOREIGN KEY (id_combo_playlists)
+REFERENCES radio.combo_playlists (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: playlists_fk | type: CONSTRAINT --
--- ALTER TABLE radio.zone_fallback_playlist DROP CONSTRAINT IF EXISTS playlists_fk CASCADE;
-ALTER TABLE radio.zone_fallback_playlist ADD CONSTRAINT playlists_fk FOREIGN KEY (id_playlists)
+-- ALTER TABLE radio.combo_playlist_fallback DROP CONSTRAINT IF EXISTS playlists_fk CASCADE;
+ALTER TABLE radio.combo_playlist_fallback ADD CONSTRAINT playlists_fk FOREIGN KEY (id_playlists)
 REFERENCES radio.playlists (id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: radio.zone_maintainers | type: TABLE --
--- DROP TABLE IF EXISTS radio.zone_maintainers CASCADE;
-CREATE TABLE radio.zone_maintainers (
+-- object: radio.combo_playlist_maintainers | type: TABLE --
+-- DROP TABLE IF EXISTS radio.combo_playlist_maintainers CASCADE;
+CREATE TABLE radio.combo_playlist_maintainers(
 	user_id_members integer NOT NULL,
-	id_zones integer NOT NULL,
-	CONSTRAINT zone_maintainers_pk PRIMARY KEY (user_id_members,id_zones)
+	id_combo_playlists integer NOT NULL,
+	CONSTRAINT combo_playlist_maintainers_pk PRIMARY KEY (user_id_members,id_combo_playlists)
 
 );
 -- ddl-end --
-COMMENT ON TABLE radio.zone_maintainers IS 'Zone maintainers
+COMMENT ON TABLE radio.combo_playlist_maintainers IS 'Zone maintainers
 
 Constraints:
 Don''t allow removing a member that is referenced as a zone maintainer
@@ -555,16 +555,16 @@ If a zone is removed, remove all its maintainer entries';
 -- ddl-end --
 
 -- object: members_fk | type: CONSTRAINT --
--- ALTER TABLE radio.zone_maintainers DROP CONSTRAINT IF EXISTS members_fk CASCADE;
-ALTER TABLE radio.zone_maintainers ADD CONSTRAINT members_fk FOREIGN KEY (user_id_members)
+-- ALTER TABLE radio.combo_playlist_maintainers DROP CONSTRAINT IF EXISTS members_fk CASCADE;
+ALTER TABLE radio.combo_playlist_maintainers ADD CONSTRAINT members_fk FOREIGN KEY (user_id_members)
 REFERENCES radio.members (user_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
--- object: zones_fk | type: CONSTRAINT --
--- ALTER TABLE radio.zone_maintainers DROP CONSTRAINT IF EXISTS zones_fk CASCADE;
-ALTER TABLE radio.zone_maintainers ADD CONSTRAINT zones_fk FOREIGN KEY (id_zones)
-REFERENCES radio.zones (id) MATCH FULL
+-- object: combo_playlists_fk | type: CONSTRAINT --
+-- ALTER TABLE radio.combo_playlist_maintainers DROP CONSTRAINT IF EXISTS combo_playlists_fk CASCADE;
+ALTER TABLE radio.combo_playlist_maintainers ADD CONSTRAINT combo_playlists_fk FOREIGN KEY (id_combo_playlists)
+REFERENCES radio.combo_playlists (id) MATCH FULL
 ON DELETE CASCADE ON UPDATE CASCADE;
 -- ddl-end --
 
@@ -587,6 +587,32 @@ END LOOP;
 $$;
 -- ddl-end --
 ALTER FUNCTION radio.create_show(IN varchar,IN text,IN varchar,IN anyarray) OWNER TO postgres;
+-- ddl-end --
+
+-- object: radio.shows_log | type: TABLE --
+-- DROP TABLE IF EXISTS radio.shows_log CASCADE;
+CREATE TABLE radio.shows_log(
+	id serial NOT NULL,
+	id_shows integer,
+	start_time timestamp with time zone NOT NULL,
+	end_time timestamp with time zone NOT NULL,
+	recording_path varchar,
+	playlist varchar[],
+	commnents varchar,
+	CONSTRAINT shows_log_pk PRIMARY KEY (id)
+
+);
+-- ddl-end --
+COMMENT ON TABLE radio.shows_log IS 'A log for each show that was aired';
+-- ddl-end --
+ALTER TABLE radio.shows_log OWNER TO postgres;
+-- ddl-end --
+
+-- object: shows_fk | type: CONSTRAINT --
+-- ALTER TABLE radio.shows_log DROP CONSTRAINT IF EXISTS shows_fk CASCADE;
+ALTER TABLE radio.shows_log ADD CONSTRAINT shows_fk FOREIGN KEY (id_shows)
+REFERENCES radio.shows (id) MATCH FULL
+ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
 
