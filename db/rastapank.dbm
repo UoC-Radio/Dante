@@ -3,19 +3,19 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.1" last-position="447,816" last-zoom="1"
+<dbmodel pgmodeler-ver="0.9.3-alpha" last-position="92,690" last-zoom="1" max-obj-count="25"
 	 default-owner="postgres">
 <database name="rastapank_db" is-template="false" allow-conns="true">
 </database>
 
-<schema name="public" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
 </schema>
 
-<schema name="radio" fill-color="#e1e1e1">
+<schema name="radio" layer="0" fill-color="#e1e1e1">
 	<role name="postgres"/>
 </schema>
 
-<table name="members">
+<table name="members" layer="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[The radio station's members (people)]]></comment>
@@ -40,7 +40,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="week_days">
+<table name="week_days" layer="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[The 7 days of the week]]></comment>
@@ -69,7 +69,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</initial-data>
 </table>
 
-<table name="shows">
+<table name="shows" layer="0" collapse-mode="2" max-obj-count="9" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Radio shows]]></comment>
@@ -114,7 +114,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="show_producers">
+<table name="show_producers" layer="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="radio"/>
 	<comment><![CDATA[Each show has one or more producers, registered with their user ids
 
@@ -133,7 +133,7 @@ Don't allow removing a member that's still associated with a show]]></comment>
 	</customidxs>
 </table>
 
-<relationship name="members are producers of many shows" type="rel1n"
+<relationship name="members are producers of many shows" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -148,7 +148,7 @@ Don't allow removing a member that's still associated with a show]]></comment>
 	</label>
 </relationship>
 
-<relationship name="show has many producers" type="rel1n"
+<relationship name="show has many producers" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -158,7 +158,7 @@ Don't allow removing a member that's still associated with a show]]></comment>
 	 identifier="true"
 />
 
-<table name="show_urls">
+<table name="show_urls" layer="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Each show may have URLs associated with it (e.g. blog, facebook page etc)
@@ -191,7 +191,7 @@ If the show is removed, remove all URLs associated with it
 	</customidxs>
 </table>
 
-<relationship name="a show has many urls" type="rel1n"
+<relationship name="a show has many urls" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -201,7 +201,7 @@ If the show is removed, remove all URLs associated with it
 	 src-required="false" dst-required="false"
 	del-action="CASCADE"/>
 
-<table name="show_weekdays">
+<table name="show_weekdays" layer="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Shows aired on a weekly basis
@@ -233,7 +233,7 @@ Don't allow deleting a day (shouldn't happen anyway) if it contains scheduled sh
 	</customidxs>
 </table>
 
-<relationship name="shows can be arranged in many timeslots" type="rel1n"
+<relationship name="shows can be arranged in many timeslots" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -247,7 +247,7 @@ Don't allow deleting a day (shouldn't happen anyway) if it contains scheduled sh
 	</label>
 </relationship>
 
-<relationship name="one weekday contains many shows" type="rel1n"
+<relationship name="one weekday contains many shows" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -261,7 +261,7 @@ Don't allow deleting a day (shouldn't happen anyway) if it contains scheduled sh
 	</label>
 </relationship>
 
-<table name="show_oneshot">
+<table name="show_oneshot" layer="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Shows aired once
@@ -292,7 +292,7 @@ If the show is removed, remove all one-shot schedule entries associated with it]
 	</customidxs>
 </table>
 
-<relationship name="show can be schduled many times one shot" type="rel1n"
+<relationship name="show can be schduled many times one shot" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -306,7 +306,7 @@ If the show is removed, remove all one-shot schedule entries associated with it]
 	</label>
 </relationship>
 
-<table name="show_messages">
+<table name="show_messages" layer="0" collapse-mode="2" max-obj-count="8" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Listener messages
@@ -349,7 +349,7 @@ If the show is removed, remove all messages associated with it]]></comment>
 	</customidxs>
 </table>
 
-<relationship name="a show has many messages" type="rel1n"
+<relationship name="a show has many messages" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -363,7 +363,7 @@ If the show is removed, remove all messages associated with it]]></comment>
 	</label>
 </relationship>
 
-<table name="playlist_types">
+<table name="playlist_types" layer="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<position x="1840" y="260"/>
@@ -390,7 +390,7 @@ If the show is removed, remove all messages associated with it]]></comment>
 	</initial-data>
 </table>
 
-<table name="playlists">
+<table name="playlists" layer="0" collapse-mode="2" max-obj-count="13" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Playlists
@@ -453,7 +453,7 @@ Constraint: Don't allow removing a playlist type (shouldn't happen anyway) if th
 	</customidxs>
 </table>
 
-<relationship name="type of playlist" type="rel1n"
+<relationship name="type of playlist" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -467,7 +467,7 @@ Constraint: Don't allow removing a playlist type (shouldn't happen anyway) if th
 	</label>
 </relationship>
 
-<table name="playlist_maintainers">
+<table name="playlist_maintainers" layer="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="radio"/>
 	<comment><![CDATA[Playlist maintainers
 
@@ -486,7 +486,7 @@ If a playlist is removed, all its maintainer entries]]></comment>
 	</customidxs>
 </table>
 
-<relationship name="member maintains many playlists" type="rel1n"
+<relationship name="member maintains many playlists" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -501,7 +501,7 @@ If a playlist is removed, all its maintainer entries]]></comment>
 	</label>
 </relationship>
 
-<relationship name="playlists is maintained by many members" type="rel1n"
+<relationship name="playlists is maintained by many members" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -522,7 +522,7 @@ If a playlist is removed, all its maintainer entries]]></comment>
 	<enumeration values="Global,Alternative,Contemporary,Electronica,Experimental,Funk the Soul of America,Fusion,Katsaduboreggae,Morning,Orchestrals,Psychedelies,Traditional,Undeground,Various,Xilo"/>
 </usertype>
 
-<table name="day_zones">
+<table name="day_zones" layer="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="radio"/>
 	<comment><![CDATA[Each day is split into zones to represent different moods within the day.
 
@@ -544,17 +544,17 @@ If a zone is removed, remove all schedule entries referring to it]]></comment>
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_combo_playlists" index="4"/>
+		<object name="id_composite_playlists" index="4"/>
 		<object name="id_week_days" index="3"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="combo_playlists_fk" index="2"/>
+		<object name="composite_playlists_fk" index="2"/>
 		<object name="week_days_fk" index="1"/>
 	</customidxs>
 </table>
 
-<table name="combo_playlists">
+<table name="composite_playlists" layer="0" collapse-mode="2" max-obj-count="8" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[We use the term zone to represent a musical context, think of it as a "mood".]]></comment>
@@ -580,15 +580,15 @@ If a zone is removed, remove all schedule entries referring to it]]></comment>
 		<type name="text" length="0"/>
 		<comment><![CDATA[Comments text (optional, internal)]]></comment>
 	</column>
-	<column name="category" not-null="true" default-value="radio.zone_category.Global">
+	<column name="category">
 		<type name="radio.zone_category" length="0"/>
 	</column>
-	<constraint name="combo_playlists_pkey" type="pk-constr" table="radio.combo_playlists">
+	<constraint name="composite_playlists_pkey" type="pk-constr" table="radio.composite_playlists">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<relationship name="a weekday contains many zones" type="rel1n"
+<relationship name="a weekday contains many zones" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -601,7 +601,7 @@ If a zone is removed, remove all schedule entries referring to it]]></comment>
 	</label>
 </relationship>
 
-<table name="combo_playlists_playlists">
+<table name="composite_playlists_playlists" layer="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="radio"/>
 	<comment><![CDATA[Table for main playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
 
@@ -613,28 +613,28 @@ Don't allow removing a playlist still associated with a zone]]></comment>
 		<type name="numeric" length="0"/>
 		<comment><![CDATA[Scheduling weight for 'main' playlists. Must be  0 < weight <= 1 and the sum of all 'main' playlist weights on a zone must be 1]]></comment>
 	</column>
-	<constraint name="check_sched_weight" type="ck-constr" table="radio.combo_playlists_playlists">
+	<constraint name="check_sched_weight" type="ck-constr" table="radio.composite_playlists_playlists">
 			<expression><![CDATA[sched_weight > 0.0 AND sched_weight <= 1.0]]></expression>
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_combo_playlists" index="2"/>
+		<object name="id_composite_playlists" index="2"/>
 		<object name="id_playlists" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="combo_playlists_fk" index="3"/>
-		<object name="combo_playlists_playlists_pk" index="1"/>
+		<object name="composite_playlists_fk" index="3"/>
+		<object name="composite_playlists_playlists_pk" index="1"/>
 		<object name="playlists_fk" index="2"/>
 	</customidxs>
 </table>
 
-<relationship name="zone many playlists" type="rel1n"
+<relationship name="zone many playlists" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 src-table="radio.combo_playlists"
-	 dst-table="radio.combo_playlists_playlists"
+	 src-table="radio.composite_playlists"
+	 dst-table="radio.composite_playlists_playlists"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 >
@@ -643,12 +643,12 @@ Don't allow removing a playlist still associated with a zone]]></comment>
 	</label>
 </relationship>
 
-<relationship name="playlist in many zones" type="rel1n"
+<relationship name="playlist in many zones" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
 	 src-table="radio.playlists"
-	 dst-table="radio.combo_playlists_playlists"
+	 dst-table="radio.composite_playlists_playlists"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 
@@ -658,7 +658,7 @@ Don't allow removing a playlist still associated with a zone]]></comment>
 	</label>
 </relationship>
 
-<table name="combo_playlist_intermediate">
+<table name="composite_playlist_intermediate" layer="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="radio"/>
 	<comment><![CDATA[Table for intermediate playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
 
@@ -674,31 +674,31 @@ Don't allow removing an intermediate playlist still associated with a zone]]></c
 		<type name="integer" length="0"/>
 		<comment><![CDATA[Number of items to shedule each time zero is a special case in which we don't schedule an intermediate playlist based on time but from a "hint" encoded in the main playlist]]></comment>
 	</column>
-	<constraint name="check_interval" type="ck-constr" table="radio.combo_playlist_intermediate">
+	<constraint name="check_interval" type="ck-constr" table="radio.composite_playlist_intermediate">
 			<expression><![CDATA[sched_interval_mins > 0]]></expression>
 	</constraint>
-	<constraint name="check_cardinality" type="ck-constr" table="radio.combo_playlist_intermediate">
+	<constraint name="check_cardinality" type="ck-constr" table="radio.composite_playlist_intermediate">
 			<expression><![CDATA[sceduled_items_cardinality >= 0]]></expression>
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_combo_playlists" index="3"/>
+		<object name="id_composite_playlists" index="3"/>
 		<object name="id_playlists" index="0"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="combo_playlist_intermediate_pk" index="3"/>
-		<object name="combo_playlists_fk" index="4"/>
+		<object name="composite_playlist_intermediate_pk" index="3"/>
+		<object name="composite_playlists_fk" index="4"/>
 		<object name="playlists_fk" index="1"/>
 	</customidxs>
 </table>
 
-<relationship name="playlist in many zones as intermediate" type="rel1n"
+<relationship name="playlist in many zones as intermediate" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
 	 src-table="radio.playlists"
-	 dst-table="radio.combo_playlist_intermediate"
+	 dst-table="radio.composite_playlist_intermediate"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 
@@ -708,12 +708,12 @@ Don't allow removing an intermediate playlist still associated with a zone]]></c
 	</label>
 </relationship>
 
-<relationship name="zone has many intermediate" type="rel1n"
+<relationship name="zone has many intermediate" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 src-table="radio.combo_playlists"
-	 dst-table="radio.combo_playlist_intermediate"
+	 src-table="radio.composite_playlists"
+	 dst-table="radio.composite_playlist_intermediate"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 >
@@ -722,7 +722,7 @@ Don't allow removing an intermediate playlist still associated with a zone]]></c
 	</label>
 </relationship>
 
-<table name="combo_playlist_fallback">
+<table name="composite_playlist_fallback" layer="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="radio"/>
 	<comment><![CDATA[Table for fallback playlists. Each zone may contain various playlists, it must include at least one main playlist and optionaly a fallback playlist and various intermediate ones.
 
@@ -732,23 +732,23 @@ Don't allow removing a fallback playlist still associated with a zone]]></commen
 	<position x="2000" y="620"/>
 
 	<customidxs object-type="column">
-		<object name="id_combo_playlists" index="1"/>
+		<object name="id_composite_playlists" index="1"/>
 		<object name="id_playlists" index="0"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="combo_playlist_fallback_pk" index="0"/>
-		<object name="combo_playlists_fk" index="2"/>
+		<object name="composite_playlist_fallback_pk" index="0"/>
+		<object name="composite_playlists_fk" index="2"/>
 		<object name="playlists_fk" index="1"/>
 	</customidxs>
 </table>
 
-<relationship name="zone has many fallbacks" type="rel1n"
+<relationship name="zone has many fallbacks" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 src-table="radio.combo_playlists"
-	 dst-table="radio.combo_playlist_fallback"
+	 src-table="radio.composite_playlists"
+	 dst-table="radio.composite_playlist_fallback"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 >
@@ -760,12 +760,12 @@ Don't allow removing a fallback playlist still associated with a zone]]></commen
 	</label>
 </relationship>
 
-<relationship name="playlist in many zones as fallback" type="rel1n"
+<relationship name="playlist in many zones as fallback" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
 	 src-table="radio.playlists"
-	 dst-table="radio.combo_playlist_fallback"
+	 dst-table="radio.composite_playlist_fallback"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 
@@ -775,7 +775,7 @@ Don't allow removing a fallback playlist still associated with a zone]]></commen
 	</label>
 </relationship>
 
-<table name="combo_playlist_maintainers">
+<table name="composite_playlist_maintainers" layer="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="radio"/>
 	<comment><![CDATA[Zone maintainers
 
@@ -785,23 +785,23 @@ If a zone is removed, remove all its maintainer entries]]></comment>
 	<position x="1280" y="720"/>
 
 	<customidxs object-type="column">
-		<object name="id_combo_playlists" index="1"/>
+		<object name="id_composite_playlists" index="1"/>
 		<object name="user_id_members" index="0"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="combo_playlist_maintainers_pk" index="0"/>
-		<object name="combo_playlists_fk" index="2"/>
+		<object name="composite_playlist_maintainers_pk" index="0"/>
+		<object name="composite_playlists_fk" index="2"/>
 		<object name="members_fk" index="1"/>
 	</customidxs>
 </table>
 
-<relationship name="member maintains many zones" type="rel1n"
+<relationship name="member maintains many zones" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
 	 src-table="radio.members"
-	 dst-table="radio.combo_playlist_maintainers"
+	 dst-table="radio.composite_playlist_maintainers"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 
@@ -811,12 +811,12 @@ If a zone is removed, remove all its maintainer entries]]></comment>
 	</label>
 </relationship>
 
-<relationship name="zone maintained by many members" type="rel1n"
+<relationship name="zone maintained by many members" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 src-table="radio.combo_playlists"
-	 dst-table="radio.combo_playlist_maintainers"
+	 src-table="radio.composite_playlists"
+	 dst-table="radio.composite_playlist_maintainers"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 >
@@ -859,7 +859,7 @@ If a zone is removed, remove all its maintainer entries]]></comment>
 END LOOP;]]></definition>
 </function>
 
-<table name="shows_log">
+<table name="shows_log" layer="0" collapse-mode="2" max-obj-count="8" z-value="0">
 	<schema name="radio"/>
 	<role name="postgres"/>
 	<comment><![CDATA[A log for each show that was aired]]></comment>
@@ -895,7 +895,7 @@ END LOOP;]]></definition>
 	</customidxs>
 </table>
 
-<relationship name="shows_has_many_shows_log" type="rel1n"
+<relationship name="shows_has_many_shows_log" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
@@ -904,11 +904,11 @@ END LOOP;]]></definition>
 	 dst-table="radio.shows_log"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="a zone belongs to many weekdays" type="rel1n"
+<relationship name="a zone belongs to many weekdays" type="rel1n" layer="0"
 	 src-col-pattern="{sc}_{st}"
 	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
 	 src-fk-pattern="{st}_fk"
-	 src-table="radio.combo_playlists"
+	 src-table="radio.composite_playlists"
 	 dst-table="radio.day_zones"
 	 src-required="true" dst-required="false">
 	<label ref-type="name-label">
