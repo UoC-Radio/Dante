@@ -6,7 +6,7 @@ import (
 	"context"
 	_ "encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/volatiletech/sqlboiler/queries/qm"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"net/http"
 )
 

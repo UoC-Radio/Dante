@@ -5,7 +5,7 @@ import (
 	"Dante/api/responses"
 	"context"
 	"github.com/gorilla/mux"
-	"github.com/volatiletech/sqlboiler/queries/qm"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"net/http"
 )
 

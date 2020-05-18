@@ -33,7 +33,8 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/activate", middlewares.SetMiddlewareIPFilter(s.SetActiveShow)).Methods("PUT")
 	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/deactivate", middlewares.SetMiddlewareIPFilter(s.SetActiveShow)).Methods("PUT")
 
-	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET").Queries("page", "{page:[1-9][0-9]*}").Name("Pagination")
+	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET").Name("Pagination").
+		Queries("limit", "{limit:[1-9][0-9]*}", "received")
 	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/messages", middlewares.SetMiddlewareIPFilter(s.GetMessages)).Methods("GET")
 	s.Router.HandleFunc("/shows/{id:"+idRegEx+"}/messages", middlewares.SetMiddlewareIPFilter(s.SendMessage)).Methods("POST")
 

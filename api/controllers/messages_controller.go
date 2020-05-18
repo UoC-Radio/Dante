@@ -8,9 +8,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/volatiletech/null"
-	"github.com/volatiletech/sqlboiler/boil"
-	"github.com/volatiletech/sqlboiler/queries/qm"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -61,21 +61,20 @@ func (server *Server) GetMessages(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	show_id := vars["id"]
-	page, found := vars["page"]
+	limit, found := vars["limit"]
 
 	var messages models.ShowMessageSlice
 	var err error
 
 	if found {
-		pageIdx, err := strconv.Atoi(page)
-		pageIdx -= 1
+		limit, err := strconv.Atoi(limit)
 
 		if err != nil {
 			responses.ERROR(w, http.StatusBadRequest, err)
 			return
 		}
 
-		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id), qm.OrderBy("received_datetime DESC"), qm.Limit(20), qm.Offset(pageIdx*20)).All(context.Background(), server.DB)
+		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id), qm.OrderBy("received_datetime DESC"), qm.Limit(limit), qm.Offset(20)).All(context.Background(), server.DB)
 	} else {
 		messages, err = models.ShowMessages(qm.Where("id_shows=?", show_id), qm.OrderBy("received_datetime DESC")).All(context.Background(), server.DB)
 	}

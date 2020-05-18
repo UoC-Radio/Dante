@@ -9,9 +9,9 @@ import (
 	"errors"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
-	"github.com/volatiletech/null"
-	"github.com/volatiletech/sqlboiler/boil"
-	"github.com/volatiletech/sqlboiler/queries/qm"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -212,7 +212,7 @@ func (server *Server) GetShowProducers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	showProducers, err := show.UserIDMemberMembers(qm.Where("id_shows=?", id)).All(context.Background(), server.DB)
+	showProducers, err := show.IDMemberMembers(qm.Where("id_shows=?", id)).All(context.Background(), server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
@@ -251,14 +251,14 @@ func (server *Server) AddOrRemoveShowProducer(w http.ResponseWriter, r *http.Req
 	// PUT or DELETE show_producer
 	returnStatus := http.StatusBadRequest
 	if r.Method == "PUT" {
-		err = show.AddUserIDMemberMembers(context.Background(), server.DB, false, member)
+		err = show.AddIDMemberMembers(context.Background(), server.DB, false, member)
 		if err != nil {
 			responses.ERROR(w, http.StatusBadRequest, err)
 			return
 		}
 		returnStatus = http.StatusOK
 	} else if r.Method == "DELETE" {
-		err = show.RemoveUserIDMemberMembers(context.Background(), server.DB, member)
+		err = show.RemoveIDMemberMembers(context.Background(), server.DB, member)
 		if err != nil {
 			responses.ERROR(w, http.StatusBadRequest, err)
 			return
