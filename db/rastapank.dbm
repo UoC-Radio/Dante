@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.3-alpha" last-position="92,690" last-zoom="1" max-obj-count="25"
+<dbmodel pgmodeler-ver="0.9.3-alpha" last-position="0,0" last-zoom="0.75" max-obj-count="25"
 	 default-owner="postgres">
 <database name="rastapank_db" is-template="false" allow-conns="true">
 </database>
@@ -20,7 +20,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<comment><![CDATA[The radio station's members (people)]]></comment>
 	<position x="1120" y="380"/>
-	<column name="user_id" not-null="true">
+	<column name="id" not-null="true">
 		<type name="integer" length="0"/>
 		<comment><![CDATA[We leave this as an integer instead of serial so that it doesn't get set automaticaly by the DB. The idea is to match this id with the uid on the station's user registration/authentication backend. In our case that's the uid used on LDAP.]]></comment>
 	</column>
@@ -33,7 +33,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<comment><![CDATA[User's real name]]></comment>
 	</column>
 	<constraint name="members_pk" type="pk-constr" table="radio.members">
-		<columns names="user_id" ref-type="src-columns"/>
+		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 	<constraint name="members_username_key" type="uq-constr" table="radio.members">
 		<columns names="username" ref-type="src-columns"/>
