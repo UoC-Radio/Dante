@@ -11,10 +11,10 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/volatiletech/null"
-	"github.com/volatiletech/sqlboiler/boil"
-	_ "github.com/volatiletech/sqlboiler/queries"
-	"github.com/volatiletech/sqlboiler/queries/qm"
+	"github.com/volatiletech/null/v8"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	_ "github.com/volatiletech/sqlboiler/v4/queries"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"io/ioutil"
 	_ "io/ioutil"
 	"log"
@@ -78,7 +78,7 @@ func SyncToForum(membersXML string, db *sql.DB) {
 
 	membersDict := make(map[int]*models.Member)
 	for _, m := range members {
-		membersDict[m.UserID] = m
+		membersDict[m.ID] = m
 	}
 
 	for _, user := range users {
@@ -113,7 +113,7 @@ func SyncToForum(membersXML string, db *sql.DB) {
 			fmt.Println("Inserting user " + userDict["username"] + ".")
 			// user does not exist, insert user
 			member := models.Member{
-				UserID:   user_id,
+				ID:       user_id,
 				Username: userDict["username"],
 				RealName: userDict["pf_real_life_name"],
 			}
@@ -127,7 +127,7 @@ func SyncToForum(membersXML string, db *sql.DB) {
 	err = tx.Commit()
 
 	//m := models.Member{
-	//	UserID:   0,
+	//	ID:   0,
 	//	Username: "",
 	//	RealName: "",
 	//}
@@ -170,7 +170,7 @@ func MigrateFromPreviousSqlite(dbPath string, db *sql.DB) {
 
 	membersDict := make(map[int]*models.Member)
 	for _, m := range members {
-		membersDict[m.UserID] = m
+		membersDict[m.ID] = m
 	}
 
 	// Fetch existing DB shows and place them in a handy map
@@ -314,7 +314,7 @@ func loadReplacements(path string) map[string]string {
 }
 
 func createZone(z ws.Zone, replacementsPath string, tx *sql.Tx) {
-	new_zone := models.Zone{
+	new_zone := models.CompositePlaylist{
 		Title:       z.Name,
 		Description: null.StringFrom(z.Description),
 		Comments:    null.StringFrom(z.Comment),
@@ -340,7 +340,7 @@ func createZone(z ws.Zone, replacementsPath string, tx *sql.Tx) {
 		if err != nil {
 			fmt.Println("Wrong username: " + u)
 		} else {
-			new_zone.AddUserIDMemberMembers(context.Background(), tx, false, member)
+			new_zone.AddIDMemberMembers(context.Background(), tx, false, member)
 		}
 	}
 }
@@ -374,7 +374,7 @@ func MigrateFromScheduleXML(xmlPath string, replacementsPath string, db *sql.DB)
 	for i, d := range days {
 		fmt.Println("Day:" + strconv.Itoa(i))
 		for _, z := range d.Zone {
-			zone, err := models.Zones(qm.Where("title=?", z.Name)).One(context.Background(), tx)
+			zone, err := models.CompositePlaylists(qm.Where("title=?", z.Name)).One(context.Background(), tx)
 
 			// Zone creation from the first occurence
 			if err != nil {
