@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.9.3-alpha" last-position="0,0" last-zoom="0.75" max-obj-count="25"
+<dbmodel pgmodeler-ver="0.9.3-alpha" last-position="293,0" last-zoom="0.75" max-obj-count="25"
 	 default-owner="postgres">
 <database name="rastapank_db" is-template="false" allow-conns="true">
 </database>
@@ -124,7 +124,8 @@ Don't allow removing a member that's still associated with a show]]></comment>
 	<position x="860" y="80"/>
 
 	<customidxs object-type="column">
-		<object name="user_id_members" index="0"/>
+		<object name="id_members" index="0"/>
+		<object name="id_shows" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -477,7 +478,8 @@ If a playlist is removed, all its maintainer entries]]></comment>
 	<position x="980" y="600"/>
 
 	<customidxs object-type="column">
-		<object name="user_id_members" index="0"/>
+		<object name="id_members" index="0"/>
+		<object name="id_playlists" index="1"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -786,7 +788,7 @@ If a zone is removed, remove all its maintainer entries]]></comment>
 
 	<customidxs object-type="column">
 		<object name="id_composite_playlists" index="1"/>
-		<object name="user_id_members" index="0"/>
+		<object name="id_members" index="0"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
