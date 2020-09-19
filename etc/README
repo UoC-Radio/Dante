@@ -1,1 +1,4 @@
 Place for memberslist.xml and radioShows.db used during migration from current database.
+
+sqlboiler --wipe --no-tests --no-back-referencing psql
+go run github.com/web-ridge/sqlboiler-graphql-schema --output=schema.graphql  --directives=isAuthenticated --pagination=yes
